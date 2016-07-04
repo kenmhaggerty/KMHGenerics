@@ -911,29 +911,18 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     
     [CATransaction begin];
     [self beginUpdates];
-    [CATransaction setCompletionBlock: ^{
-        [CATransaction begin];
-        [self beginUpdates];
-        [CATransaction setCompletionBlock: ^{
-            
-            setterBlock([NSArray arrayWithArray:toArray]);
-            [self insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertionAnimation];
-            
-        }];
-        
-        setterBlock([NSArray arrayWithArray:sortedArray]);
-        [self moveRowsAtIndexPaths:fromIndexPaths toIndexPaths:toIndexPaths];
-        
-        [self endUpdates];
-        [CATransaction commit];
-    }];
     
     setterBlock([NSArray arrayWithArray:deletedArray]);
     [self deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deletionAnimation];
     
+    setterBlock([NSArray arrayWithArray:sortedArray]);
+    [self moveRowsAtIndexPaths:fromIndexPaths toIndexPaths:toIndexPaths];
+    
+    setterBlock([NSArray arrayWithArray:toArray]);
+    [self insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertionAnimation];
+    
     [self endUpdates];
-    [CATransaction commit];
-}
+    [CATransaction commit];}
 
 @end
 
