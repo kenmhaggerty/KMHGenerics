@@ -1,0 +1,2 @@
+# KMHGenerics
+Generically useful methods!
