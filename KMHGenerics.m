@@ -878,7 +878,17 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     [self endUpdates];
 }
 
-- (void)updateFromArray:(nonnull NSArray *)array toArray:(nonnull NSArray *)toArray inSection:(NSUInteger)section withInsertionAnimation:(UITableViewRowAnimation)insertionAnimation deletionAnimation:(UITableViewRowAnimation)deletionAnimation setter:(nonnull void (^)(NSArray * _Nonnull data))setterBlock {
+- (void)updateFromArray:(nonnull NSArray *)array
+                toArray:(nonnull NSArray *)toArray
+              inSection:(NSUInteger)section
+ withInsertionAnimation:(UITableViewRowAnimation)insertionAnimation
+      deletionAnimation:(UITableViewRowAnimation)deletionAnimation
+                 setter:(nonnull void (^)(NSArray * _Nonnull data))setterBlock
+          insertedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))insertionBlock
+         reorderedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))reorderingBlock
+           deletedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))deletionBlock
+             completion:(nullable void (^)(void))completionBlock {
+
     NSMutableArray *deletedArray = [NSMutableArray array];
     NSMutableArray <NSIndexPath *> *indexPathsToDelete = [NSMutableArray array];
     id object;
@@ -907,22 +917,100 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     [deletedArray compareToArray:sortedArray andGenerateIndexPaths:&fromIndexPaths toMoveToIndexPaths:&toIndexPaths withSection:section];
     
     NSMutableArray <NSIndexPath *> *indexPathsToInsert = [NSMutableArray array];
-    [sortedArray compareToArray:toArray andGenerateIndexPathsToInsert:&indexPathsToInsert withSection:section];
+    NSArray *subarray;
+    for (int i = 0; i < toArray.count; i++) {
+        subarray = [toArray subarrayWithRange:NSMakeRange(0, i+1)];
+        object = toArray[i];
+        if (([sortedArray countObject:object] < [subarray countObject:object])) {
+            [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+        }
+    }
+    
+    // DELETE CELLS
+    
+    if (deletionBlock) {
+        NSMutableArray *deletedCells = [NSMutableArray array];
+        UITableViewCell *cell;
+        for (NSIndexPath *indexPath in indexPathsToDelete) {
+            cell = [self cellForRowAtIndexPath:indexPath];
+            if (cell) {
+                [deletedCells addObject:cell];
+            }
+        }
+        deletionBlock(deletedCells);
+    }
     
     [CATransaction begin];
     [self beginUpdates];
     
+    [CATransaction setCompletionBlock:^{
+        
+        // REORDER CELLS
+        
+        if (reorderingBlock) {
+            NSMutableArray *reorderedCells = [NSMutableArray array];
+            UITableViewCell *cell;
+            for (NSIndexPath *indexPath in fromIndexPaths) {
+                cell = [self cellForRowAtIndexPath:indexPath];
+                if (cell) {
+                    [reorderedCells addObject:cell];
+                }
+            }
+            reorderingBlock(reorderedCells);
+        }
+        
+        [CATransaction begin];
+        [self beginUpdates];
+        
+        [CATransaction setCompletionBlock:^{
+            
+            // INSERT CELLS
+            
+            [CATransaction begin];
+            [self beginUpdates];
+            
+            [CATransaction setCompletionBlock:^{
+                
+                // COMPLETION BLOCK
+                
+                if (completionBlock) {
+                    completionBlock();
+                }
+                
+            }];
+            
+            setterBlock([NSArray arrayWithArray:toArray]);
+            [self insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertionAnimation];
+            
+            [self endUpdates];
+            [CATransaction commit];
+            
+            if (insertionBlock) {
+                NSMutableArray *insertedCells = [NSMutableArray array];
+                UITableViewCell *cell;
+                for (NSIndexPath *indexPath in indexPathsToInsert) {
+                    cell = [self cellForRowAtIndexPath:indexPath];
+                    if (cell) {
+                        [insertedCells addObject:cell];
+                    }
+                }
+                insertionBlock(insertedCells);
+            }
+        }];
+        
+        setterBlock([NSArray arrayWithArray:sortedArray]);
+        [self moveRowsAtIndexPaths:fromIndexPaths toIndexPaths:toIndexPaths];
+        
+        [self endUpdates];
+        [CATransaction commit];
+    }];
+    
     setterBlock([NSArray arrayWithArray:deletedArray]);
     [self deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deletionAnimation];
     
-    setterBlock([NSArray arrayWithArray:sortedArray]);
-    [self moveRowsAtIndexPaths:fromIndexPaths toIndexPaths:toIndexPaths];
-    
-    setterBlock([NSArray arrayWithArray:toArray]);
-    [self insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertionAnimation];
-    
     [self endUpdates];
-    [CATransaction commit];}
+    [CATransaction commit];
+}
 
 @end
 
