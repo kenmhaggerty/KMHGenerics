@@ -42,6 +42,7 @@ extern NSString * _Nonnull const NOTIFICATION_OBJECT_KEY;
 #pragma mark - // DEFINITIONS (NSArray) //
 
 @interface NSArray (KMHGenerics)
++ (nonnull instancetype)arrayWithNullableObject:(nullable id)anObject;
 + (nonnull instancetype)arrayWithNullableObjects:(nullable id)firstObj, ...
 NS_REQUIRES_NIL_TERMINATION;
 + (nonnull instancetype)arrayWithValue:(float)value increment:(float)increment length:(NSUInteger)length;

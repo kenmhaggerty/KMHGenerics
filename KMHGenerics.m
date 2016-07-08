@@ -266,6 +266,14 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark Public Methods
 
++ (nonnull instancetype)arrayWithNullableObject:(id)anObject {
+    if (anObject) {
+        return @[anObject];
+    }
+    
+    return [NSArray array];
+}
+
 + (nonnull instancetype)arrayWithNullableObjects:(nullable id)firstObj, ... {
     NSMutableArray *array = [NSMutableArray array];
     va_list objs;
