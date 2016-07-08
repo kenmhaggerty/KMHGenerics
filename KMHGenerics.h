@@ -80,6 +80,13 @@ NS_REQUIRES_NIL_TERMINATION;
 - (nonnull NSData *)convertToData;
 @end
 
+#pragma mark - // DEFINITIONS (NSIndexSet) //
+
+@interface NSIndexSet (KMHGenerics)
++ (nonnull instancetype)indexSetWithArray:(nonnull NSArray <NSNumber *> *)array;
+- (nonnull NSArray *)array;
+@end
+
 #pragma mark - // DEFINITIONS (NSMutableDictionary) //
 
 @interface NSMutableDictionary (KMHGenerics)

@@ -625,6 +625,28 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
+#pragma mark - // IMPLEMENTATION (NSIndexSet) //
+
+@implementation NSIndexSet (KMHGenerics)
+
++ (nonnull instancetype)indexSetWithArray:(nonnull NSArray <NSNumber *> *)array {
+    NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+    for (NSNumber *indexValue in array) {
+        [indexSet addIndex:indexValue.integerValue];
+    }
+    return indexSet;
+}
+
+- (nonnull NSArray *)array {
+    NSMutableArray *array = [NSMutableArray array];
+    [self enumerateIndexesUsingBlock:^(NSUInteger index, BOOL * _Nonnull stop) {
+        [array addObject:@(index)];
+    }];
+    return [array sortedArray:YES];
+}
+
+@end
+
 #pragma mark - // IMPLEMENTATION (NSMutableDictionary) //
 
 @implementation NSMutableDictionary (KMHGenerics)
