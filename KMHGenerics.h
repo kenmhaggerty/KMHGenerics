@@ -123,7 +123,8 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark - // DEFINITIONS (UIAlertController) //
 
 @interface UIAlertController (KMHGenerics)
-+ (nonnull instancetype)alertControllerWithTitle:(nullable NSString *)title message:(nullable NSString *)message preferredStyle:(UIAlertControllerStyle)preferredStyle actions:(nullable NSArray <NSString *> *)actions preferredAction:(nullable NSString *)preferredAction dismissalText:(nullable NSString *)dismissalText completion:(nullable void (^)(UIAlertAction * _Nonnull action))completionBlock;
+@property (nonatomic, strong, nullable) NSDictionary *userInfo;
++ (nonnull instancetype)alertControllerWithTitle:(nullable NSString *)title message:(nullable NSString *)message preferredStyle:(UIAlertControllerStyle)preferredStyle actions:(nullable NSArray <NSString *> *)actions preferredAction:(nullable NSString *)preferredAction dismissalText:(nullable NSString *)dismissalText completion:(nullable void(^)(UIAlertAction * _Nonnull action, NSArray <UITextField *> * _Nonnull textFields))completionBlock;
 - (void)clearTextFields;
 @end
 

@@ -368,13 +368,16 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     }];
 }
 
-- (void)compareToArray:(nonnull NSArray *)newArray andGenerateIndexPathsToInsert:(NSArray *__autoreleasing  _Nonnull * _Nonnull)indexPaths withSection:(NSUInteger)section {
-    NSMutableArray *indexPathsToInsert = [NSMutableArray array];
-    NSUInteger index;
-    for (id obj in newArray) {
-        if (![self containsObject:obj]) {
-            index = [newArray indexOfObject:obj];
-            [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:index inSection:section]];
+- (void)compareToArray:(nonnull NSArray *)newArray andGenerateIndexPathsToInsert:(NSArray *__autoreleasing _Nonnull * _Nonnull)indexPaths withSection:(NSUInteger)section {
+    
+    NSMutableArray <NSIndexPath *> *indexPathsToInsert = [NSMutableArray array];
+    NSArray *subarray;
+    id object;
+    for (int i = 0; i < newArray.count; i++) {
+        subarray = [newArray subarrayWithRange:NSMakeRange(0, i+1)];
+        object = newArray[i];
+        if (([self countObject:object] < [subarray countObject:object])) {
+            [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:i inSection:0]];
         }
     }
     
@@ -382,18 +385,26 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 }
 
 - (void)compareToArray:(nonnull NSArray *)newArray andGenerateIndexPaths:(NSArray * _Nonnull * _Nonnull)indexPaths toMoveToIndexPaths:(NSArray * _Nonnull * _Nonnull)newIndexPaths withSection:(NSUInteger)section {
-    NSAssert(self.count == newArray.count, @"%@ and %@ must have the same number of items", stringFromVariable(self), stringFromVariable(newArray));
     
-    NSAssert([[NSSet setWithArray:self] isEqualToSet:[NSSet setWithArray:newArray]], @"%@ and %@ must have the same items", stringFromVariable(self), stringFromVariable(newArray));
+    NSCountedSet *oldSet = [NSCountedSet setWithArray:self];
+    NSCountedSet *newSet = [NSCountedSet setWithArray:newArray];
+    NSAssert([oldSet isEqualToSet:newSet], @"arrays do not contain identical objects");
     
     NSMutableArray *fromIndexPaths = [NSMutableArray array];
     NSMutableArray *toIndexPaths = [NSMutableArray array];
-    NSUInteger index, newIndex;
-    for (id obj in self) {
-        index = [self indexOfObject:obj];
-        newIndex = [newArray indexOfObject:obj];
-        if (index != newIndex) {
-            [fromIndexPaths addObject:[NSIndexPath indexPathForRow:index inSection:section]];
+    
+    id object;
+    NSArray <NSNumber *> *indices;
+    NSArray *subarray;
+    NSUInteger count, newIndex;
+    for (int i = 0; i < self.count; i++) {
+        object = self[i];
+        indices = [newArray indexesOfObject:object].array;
+        subarray = [self subarrayWithRange:NSMakeRange(0, i+1)];
+        count = [subarray countObject:object];
+        newIndex = indices[count-1].integerValue;
+        if (i != newIndex) {
+            [fromIndexPaths addObject:[NSIndexPath indexPathForRow:i inSection:section]];
             [toIndexPaths addObject:[NSIndexPath indexPathForRow:newIndex inSection:section]];
         }
     }
@@ -403,16 +414,8 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 }
 
 - (void)compareToArray:(nonnull NSArray *)newArray andGenerateIndexPathsToDelete:(NSArray *__autoreleasing  _Nonnull * _Nonnull)indexPaths withSection:(NSUInteger)section {
-    NSMutableArray *indexPathsToDelete = [NSMutableArray array];
-    NSUInteger index;
-    for (id obj in self) {
-        if (![newArray containsObject:obj]) {
-            index = [self indexOfObject:obj];
-            [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:index inSection:section]];
-        }
-    }
     
-    *indexPaths = [NSArray arrayWithArray:indexPathsToDelete];
+    [newArray compareToArray:self andGenerateIndexPathsToInsert:indexPaths withSection:section];
 }
 
 - (NSUInteger)countObject:(nonnull id)object {
@@ -762,8 +765,16 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark Public Methods
 
-+ (nonnull instancetype)alertControllerWithTitle:(nullable NSString *)title message:(nullable NSString *)message preferredStyle:(UIAlertControllerStyle)preferredStyle actions:(nullable NSArray <NSString *> *)actions preferredAction:(nullable NSString *)preferredAction dismissalText:(nullable NSString *)dismissalText completion:(nullable void(^)(UIAlertAction * _Nonnull action))completionBlock {
-    id alertController = [[self class] alertControllerWithTitle:title message:message preferredStyle:preferredStyle];
+- (void)setUserInfo:(nullable NSDictionary *)userInfo {
+    objc_setAssociatedObject(self, @selector(userInfo), userInfo, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (nullable NSDictionary *)userInfo {
+    return objc_getAssociatedObject(self, @selector(userInfo));
+}
+
++ (nonnull instancetype)alertControllerWithTitle:(nullable NSString *)title message:(nullable NSString *)message preferredStyle:(UIAlertControllerStyle)preferredStyle actions:(nullable NSArray <NSString *> *)actions preferredAction:(nullable NSString *)preferredAction dismissalText:(nullable NSString *)dismissalText completion:(nullable void(^)(UIAlertAction * _Nonnull action, NSArray <UITextField *> * _Nonnull textFields))completionBlock {
+    UIAlertController *alertController = [[self class] alertControllerWithTitle:title message:message preferredStyle:preferredStyle];
     if (dismissalText || !actions) {
         [alertController addAction:[UIAlertAction actionWithTitle:(dismissalText ?: @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             [alertController clearTextFields];
@@ -774,7 +785,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
         for (NSString *title in actions) {
             alertAction = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 if (completionBlock) {
-                    completionBlock(action);
+                    completionBlock(action, alertController.textFields);
                 }
             }];
             [alertController addAction:alertAction];
@@ -956,15 +967,8 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     }
     [deletedArray compareToArray:sortedArray andGenerateIndexPaths:&fromIndexPaths toMoveToIndexPaths:&toIndexPaths withSection:section];
     
-    NSMutableArray <NSIndexPath *> *indexPathsToInsert = [NSMutableArray array];
-    NSArray *subarray;
-    for (int i = 0; i < toArray.count; i++) {
-        subarray = [toArray subarrayWithRange:NSMakeRange(0, i+1)];
-        object = toArray[i];
-        if (([sortedArray countObject:object] < [subarray countObject:object])) {
-            [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:i inSection:0]];
-        }
-    }
+    NSArray <NSIndexPath *> *indexPathsToInsert;
+    [sortedArray compareToArray:toArray andGenerateIndexPathsToInsert:&indexPathsToInsert withSection:0];
     
     // DELETE CELLS
     
