@@ -1277,4 +1277,9 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     };
 }
 
+- (void)presentError:(nonnull NSError *)error {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@ Error %ld", error.domain, (long)error.code] message:[[NSArray arrayWithNullableObjects:error.localizedDescription, error.localizedRecoverySuggestion, nil] componentsJoinedByString:@" "] preferredStyle:UIAlertControllerStyleAlert actions:nil preferredAction:nil dismissalText:nil completion:nil];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 @end
