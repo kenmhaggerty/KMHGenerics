@@ -55,6 +55,7 @@ NS_REQUIRES_NIL_TERMINATION;
 - (void)compareToArray:(nonnull NSArray *)newArray andGenerateIndexPaths:(NSArray * _Nonnull * _Nonnull)indexPaths toMoveToIndexPaths:(NSArray * _Nonnull * _Nonnull)newIndexPaths withSection:(NSUInteger)section;
 - (void)compareToArray:(nonnull NSArray *)newArray andGenerateIndexPathsToDelete:(NSArray * _Nonnull * _Nonnull)indexPaths withSection:(NSUInteger)section;
 - (NSUInteger)countObject:(nonnull id)object;
+- (nonnull NSIndexSet *)indexesOfObject:(nonnull id)anObject;
 @end
 
 #pragma mark - // DEFINITIONS (NSData) //

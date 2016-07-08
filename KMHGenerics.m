@@ -421,6 +421,16 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     }]].count;
 }
 
+- (nonnull NSIndexSet *)indexesOfObject:(nonnull id)anObject {
+    NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+    for (int i = 0; i < self.count; i++) {
+        if ([self[i] isEqual:anObject]) {
+            [indexSet addIndex:i];
+        }
+    }
+    return indexSet;
+}
+
 #pragma mark Private Methods
 
 + (NSNumber *)sortValueForObject:(id _Nonnull)obj {
