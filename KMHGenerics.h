@@ -108,6 +108,12 @@ NS_REQUIRES_NIL_TERMINATION;
 - (void)teardown;
 @end
 
+#pragma mark - // DEFINITIONS (NSSet) //
+
+@interface NSSet (KMHGenerics)
+- (nonnull instancetype)setBySubtractingSet:(nonnull NSSet *)set;
+@end
+
 #pragma mark - // DEFINITIONS (NSString) //
 
 @interface NSString (KMHGenerics)

@@ -711,6 +711,20 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
+#pragma mark - // IMPLEMENTATION (NSSet) //
+
+@implementation NSSet (KMHGenerics)
+
+#pragma mark Public Methods
+
+- (nonnull instancetype)setBySubtractingSet:(nonnull NSSet *)set {
+    NSMutableSet *mutableSet = [NSMutableSet setWithSet:self];
+    [mutableSet minusSet:set];
+    return mutableSet;
+}
+
+@end
+
 #pragma mark - // IMPLEMENTATION (NSString) //
 
 @implementation NSString (KMHGenerics)
