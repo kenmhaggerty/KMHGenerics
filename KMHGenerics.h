@@ -111,6 +111,7 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark - // DEFINITIONS (NSSet) //
 
 @interface NSSet (KMHGenerics)
+- (nonnull instancetype)setByRemovingObject:(nonnull id)anObject;
 - (nonnull instancetype)setBySubtractingSet:(nonnull NSSet *)set;
 @end
 
