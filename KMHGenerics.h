@@ -108,6 +108,13 @@ NS_REQUIRES_NIL_TERMINATION;
 - (void)teardown;
 @end
 
+#pragma mark - // DEFINITIONS (NSOrderedSet) //
+
+@interface NSOrderedSet (KMHGenerics)
+- (nonnull instancetype)orderedSetByRemovingObject:(nonnull id)anObject;
+- (nonnull instancetype)orderedSetBySubtractingSet:(nonnull NSSet *)set;
+@end
+
 #pragma mark - // DEFINITIONS (NSSet) //
 
 @interface NSSet (KMHGenerics)
