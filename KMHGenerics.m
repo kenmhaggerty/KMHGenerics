@@ -1340,4 +1340,13 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void)popViewControllerAnimated:(BOOL)animated {
+    if (self.navigationController) {
+        [self.navigationController popViewControllerAnimated:animated];
+    }
+    else {
+        [self dismissViewControllerAnimated:animated completion:nil];
+    }
+}
+
 @end

@@ -216,4 +216,5 @@ NS_REQUIRES_NIL_TERMINATION;
 @interface UIViewController (KMHGenerics)
 - (void)performBlockOnChildViewControllers:(nonnull void (^)(UIViewController * _Nonnull childViewController))block;
 - (void)presentError:(nonnull NSError *)error;
+- (void)popViewControllerAnimated:(BOOL)animated;
 @end
