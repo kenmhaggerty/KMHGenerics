@@ -746,7 +746,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 - (nonnull instancetype)setBySubtractingSet:(nonnull NSSet *)set {
     NSMutableSet *mutableSet = [NSMutableSet setWithSet:self];
     [mutableSet minusSet:set];
-    return mutableSet;
+    return [[self class] setWithSet:mutableSet];
 }
 
 @end
