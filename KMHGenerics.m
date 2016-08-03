@@ -943,25 +943,32 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     [self endUpdates];
 }
 
-- (void)updateFromArray:(nonnull NSArray *)array
-                toArray:(nonnull NSArray *)toArray
-              inSection:(NSUInteger)section
- withInsertionAnimation:(UITableViewRowAnimation)insertionAnimation
-      deletionAnimation:(UITableViewRowAnimation)deletionAnimation
-                 setter:(nonnull void (^)(NSArray * _Nonnull data))setterBlock
-          insertedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))insertionBlock
-         reorderedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))reorderingBlock
-           deletedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))deletionBlock
-             completion:(nullable void (^)(void))completionBlock {
-
+- (void)updateSection:(NSUInteger)section
+             withData:(nonnull NSArray *)data
+   insertionAnimation:(UITableViewRowAnimation)insertionAnimation
+    deletionAnimation:(UITableViewRowAnimation)deletionAnimation
+               getter:(nonnull NSArray * _Nonnull(^)(void))getter
+               setter:(nonnull void (^)(NSArray * _Nonnull data))setter
+        insertedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))insertionBlock
+       reorderedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))reorderingBlock
+         deletedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))deletionBlock
+           completion:(nullable void (^)(void))completionBlock {
+    
+    [CATransaction setValue:@YES forKey:@"cancelled"];
+    [self.layer removeAllAnimations];
+    
+    NSArray *fromArray = getter();
+    
+    // DELETION //
+    
     NSMutableArray *deletedArray = [NSMutableArray array];
     NSMutableArray <NSIndexPath *> *indexPathsToDelete = [NSMutableArray array];
     id object;
     NSUInteger countAdded, countTarget;
-    for (int i = 0; i < array.count; i++) {
-        object = array[i];
+    for (int i = 0; i < fromArray.count; i++) {
+        object = fromArray[i];
         countAdded = [deletedArray countObject:object];
-        countTarget = [toArray countObject:object];
+        countTarget = [data countObject:object];
         if (countAdded < countTarget) {
             [deletedArray addObject:object];
         }
@@ -970,40 +977,56 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
         }
     }
     
+    if (![fromArray isEqualToArray:deletedArray]) {
+        
+        if (deletionBlock) {
+            NSMutableArray *deletedCells = [NSMutableArray array];
+            UITableViewCell *cell;
+            for (NSIndexPath *indexPath in indexPathsToDelete) {
+                cell = [self cellForRowAtIndexPath:indexPath];
+                if (cell) {
+                    [deletedCells addObject:cell];
+                }
+            }
+            deletionBlock(deletedCells);
+        }
+        
+        [CATransaction setValue:@NO forKey:@"cancelled"];
+        
+        [CATransaction begin];
+        [self beginUpdates];
+        
+        [CATransaction setCompletionBlock:^{
+            if ([CATransaction valueForKey:@"cancelled"]) {
+                return;
+            }
+            
+            [self updateSection:section withData:data insertionAnimation:insertionAnimation deletionAnimation:deletionAnimation getter:getter setter:setter insertedCells:insertionBlock reorderedCells:reorderingBlock deletedCells:deletionBlock completion:completionBlock];
+        }];
+        
+        setter([NSArray arrayWithArray:deletedArray]);
+        [self deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deletionAnimation];
+        
+        [self endUpdates];
+        [CATransaction commit];
+        
+        return;
+    }
+
+    // REORDERING //
+    
     NSMutableArray *sortedArray = [NSMutableArray arrayWithCapacity:deletedArray.count];
-    NSMutableArray <NSIndexPath *> *fromIndexPaths = [NSMutableArray array];
-    NSMutableArray <NSIndexPath *> *toIndexPaths = [NSMutableArray array];
-    for (int i = 0; i < toArray.count; i++) {
-        object = toArray[i];
+    for (int i = 0; i < data.count; i++) {
+        object = data[i];
         if (([deletedArray containsObject:object]) && ([sortedArray countObject:object] < [deletedArray countObject:object])) {
             [sortedArray addObject:object];
         }
     }
-    [deletedArray compareToArray:sortedArray andGenerateIndexPaths:&fromIndexPaths toMoveToIndexPaths:&toIndexPaths withSection:section];
     
-    NSArray <NSIndexPath *> *indexPathsToInsert;
-    [sortedArray compareToArray:toArray andGenerateIndexPathsToInsert:&indexPathsToInsert withSection:0];
-    
-    // DELETE CELLS
-    
-    if (deletionBlock) {
-        NSMutableArray *deletedCells = [NSMutableArray array];
-        UITableViewCell *cell;
-        for (NSIndexPath *indexPath in indexPathsToDelete) {
-            cell = [self cellForRowAtIndexPath:indexPath];
-            if (cell) {
-                [deletedCells addObject:cell];
-            }
-        }
-        deletionBlock(deletedCells);
-    }
-    
-    [CATransaction begin];
-    [self beginUpdates];
-    
-    [CATransaction setCompletionBlock:^{
+    if (![deletedArray isEqualToArray:sortedArray]) {
         
-        // REORDER CELLS
+        NSMutableArray <NSIndexPath *> *fromIndexPaths, *toIndexPaths;
+        [deletedArray compareToArray:sortedArray andGenerateIndexPaths:&fromIndexPaths toMoveToIndexPaths:&toIndexPaths withSection:section];
         
         if (reorderingBlock) {
             NSMutableArray *reorderedCells = [NSMutableArray array];
@@ -1017,57 +1040,74 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
             reorderingBlock(reorderedCells);
         }
         
+        [CATransaction setValue:@NO forKey:@"cancelled"];
+        
         [CATransaction begin];
         [self beginUpdates];
         
         [CATransaction setCompletionBlock:^{
-            
-            // INSERT CELLS
-            
-            [CATransaction begin];
-            [self beginUpdates];
-            
-            [CATransaction setCompletionBlock:^{
-                
-                // COMPLETION BLOCK
-                
-                if (completionBlock) {
-                    completionBlock();
-                }
-                
-            }];
-            
-            setterBlock([NSArray arrayWithArray:toArray]);
-            [self insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertionAnimation];
-            
-            [self endUpdates];
-            [CATransaction commit];
-            
-            if (insertionBlock) {
-                NSMutableArray *insertedCells = [NSMutableArray array];
-                UITableViewCell *cell;
-                for (NSIndexPath *indexPath in indexPathsToInsert) {
-                    cell = [self cellForRowAtIndexPath:indexPath];
-                    if (cell) {
-                        [insertedCells addObject:cell];
-                    }
-                }
-                insertionBlock(insertedCells);
+            if ([CATransaction valueForKey:@"cancelled"]) {
+                return;
             }
+            
+            [self updateSection:section withData:data insertionAnimation:insertionAnimation deletionAnimation:deletionAnimation getter:getter setter:setter insertedCells:insertionBlock reorderedCells:reorderingBlock deletedCells:deletionBlock completion:completionBlock];
         }];
         
-        setterBlock([NSArray arrayWithArray:sortedArray]);
+        setter([NSArray arrayWithArray:sortedArray]);
         [self moveRowsAtIndexPaths:fromIndexPaths toIndexPaths:toIndexPaths];
         
         [self endUpdates];
         [CATransaction commit];
-    }];
+        
+        return;
+    }
     
-    setterBlock([NSArray arrayWithArray:deletedArray]);
-    [self deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deletionAnimation];
+    // INSERTION //
     
-    [self endUpdates];
-    [CATransaction commit];
+    if (![sortedArray isEqualToArray:data]) {
+        
+        NSArray <NSIndexPath *> *indexPathsToInsert;
+        [sortedArray compareToArray:data andGenerateIndexPathsToInsert:&indexPathsToInsert withSection:0];
+        
+        [CATransaction setValue:@NO forKey:@"cancelled"];
+        
+        [CATransaction begin];
+        [self beginUpdates];
+        
+        [CATransaction setCompletionBlock:^{
+            if ([CATransaction valueForKey:@"cancelled"]) {
+                return;
+            }
+            
+            [self updateSection:section withData:data insertionAnimation:insertionAnimation deletionAnimation:deletionAnimation getter:getter setter:setter insertedCells:insertionBlock reorderedCells:reorderingBlock deletedCells:deletionBlock completion:completionBlock];
+        }];
+        
+        setter([NSArray arrayWithArray:data]);
+        [self insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertionAnimation];
+        
+        [self endUpdates];
+        [CATransaction commit];
+        
+        if (insertionBlock) {
+            NSMutableArray *insertedCells = [NSMutableArray array];
+            UITableViewCell *cell;
+            for (NSIndexPath *indexPath in indexPathsToInsert) {
+                cell = [self cellForRowAtIndexPath:indexPath];
+                if (cell) {
+                    [insertedCells addObject:cell];
+                }
+            }
+            insertionBlock(insertedCells);
+        }
+        
+        return;
+    }
+    
+    // COMPLETION //
+    
+    if (completionBlock) {
+        completionBlock();
+    }
 }
 
 @end

@@ -170,16 +170,16 @@ NS_REQUIRES_NIL_TERMINATION;
 
 @interface UITableView (KMHGenerics)
 - (void)moveRowsAtIndexPaths:(nonnull NSArray <NSIndexPath *> *)indexPaths toIndexPaths:(nonnull NSArray <NSIndexPath *> *)newIndexPaths;
-- (void)updateFromArray:(nonnull NSArray *)array
-                toArray:(nonnull NSArray *)toArray
-              inSection:(NSUInteger)section
- withInsertionAnimation:(UITableViewRowAnimation)insertionAnimation
-      deletionAnimation:(UITableViewRowAnimation)deletionAnimation
-                 setter:(nonnull void (^)(NSArray * _Nonnull data))setterBlock
-          insertedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))insertionBlock
-         reorderedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))reorderingBlock
-           deletedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))deletionBlock
-             completion:(nullable void (^)(void))completionBlock;
+- (void)updateSection:(NSUInteger)section
+             withData:(nonnull NSArray *)data
+   insertionAnimation:(UITableViewRowAnimation)insertionAnimation
+    deletionAnimation:(UITableViewRowAnimation)deletionAnimation
+               getter:(nonnull NSArray * _Nonnull(^)(void))getter
+               setter:(nonnull void (^)(NSArray * _Nonnull data))setter
+        insertedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))insertionBlock
+       reorderedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))reorderingBlock
+         deletedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))deletionBlock
+           completion:(nullable void (^)(void))completionBlock;
 @end
 
 #pragma mark - // DEFINITIONS (UITableViewCell) //
