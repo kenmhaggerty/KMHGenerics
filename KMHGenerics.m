@@ -1241,6 +1241,77 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
+#pragma mark - // IMPLEMENTATION (UITextView) //
+
+#pragma mark Definitions
+
+CGFloat const UITextViewPlaceholderAlpha = 0.33f;
+CGFloat const UITextViewAnimationSpeed = 0.18f;
+
+@implementation UITextView (KMHGenerics)
+
+#pragma mark Setters and Getters
+
+- (void)setPlaceholder:(NSString *)placeholder {
+    self.placeholderTextView.text = placeholder;
+}
+
+- (NSString *)placeholder {
+    return self.placeholderTextView.text;
+}
+
+- (void)setPlaceholderTextView:(UITextView *)placeholderTextView {
+    objc_setAssociatedObject(self, @selector(placeholderTextView), placeholderTextView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (UITextView *)placeholderTextView {
+    UITextView *placeholderTextView = objc_getAssociatedObject(self, @selector(placeholderTextView));
+    if (placeholderTextView) {
+        if (![self.subviews containsObject:placeholderTextView]) {
+            [self addSubview:placeholderTextView];
+            [self sendSubviewToBack:placeholderTextView];
+            [self addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:placeholderTextView attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f]];
+            [self addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:placeholderTextView attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0.0f]];
+            [self addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:placeholderTextView attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f]];
+            [self addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:placeholderTextView attribute:NSLayoutAttributeHeight multiplier:1.0f constant:0.0f]];
+        }
+        return placeholderTextView;
+    }
+    
+    placeholderTextView = [[UITextView alloc] initWithFrame:self.bounds textContainer:nil];
+    placeholderTextView.userInteractionEnabled = NO;
+    placeholderTextView.translatesAutoresizingMaskIntoConstraints = NO;
+    placeholderTextView.scrollEnabled = NO;
+    placeholderTextView.backgroundColor = [UIColor clearColor];
+    placeholderTextView.alpha = UITextViewPlaceholderAlpha;
+    placeholderTextView.textContainerInset = self.textContainerInset;
+    placeholderTextView.textContainer.lineFragmentPadding = self.textContainer.lineFragmentPadding;
+    placeholderTextView.font = self.font;
+    placeholderTextView.textColor = self.textColor;
+    placeholderTextView.delegate = self;
+    self.placeholderTextView = placeholderTextView;
+    return self.placeholderTextView;
+}
+
+#pragma mark Public Methods
+
+- (void)showPlaceholder:(BOOL)show animated:(BOOL)animated {
+    [UIView animateWithDuration:(animated ? UITextViewAnimationSpeed : 0) animations:^{
+        self.placeholderTextView.alpha = show ? UITextViewPlaceholderAlpha : 0.0f;
+    }];
+}
+
+
+#pragma mark Overwritten Methods
+
+- (void)layoutIfNeeded {
+    [super layoutIfNeeded];
+    
+    [self showPlaceholder:(self.text.length == 0) animated:NO];
+}
+
+@end
+
 #pragma mark - // IMPLEMENTATION (UIView) //
 
 @implementation UIView (KMHGenerics)

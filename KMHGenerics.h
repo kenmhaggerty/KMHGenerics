@@ -217,6 +217,13 @@ NS_REQUIRES_NIL_TERMINATION;
 - (void)selectTextInRange:(NSRange)range;
 @end
 
+#pragma mark - // DEFINITIONS (UITextView) //
+
+@interface UITextView (KMHGenerics) <UITextViewDelegate>
+@property (nonatomic, strong, nullable) NSString *placeholder;
+- (void)showPlaceholder:(BOOL)show animated:(BOOL)animated;
+@end
+
 #pragma mark - // DEFINITIONS (UIView) //
 
 @interface UIView (KMHGenerics)
