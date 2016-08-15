@@ -317,9 +317,21 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return [[self class] arrayWithArray:array];
 }
 
+- (nonnull instancetype)arrayByRemovingObject:(nonnull id)anObject {
+    NSMutableArray *array = [self mutableCopy];
+    [array removeObject:anObject];
+    return [NSArray arrayWithArray:array];
+}
+
 - (nonnull instancetype)arrayByRemovingObjectsInArray:(nonnull NSArray *)otherArray {
     NSMutableArray *array = [self mutableCopy];
     [array removeObjectsInArray:otherArray];
+    return [NSArray arrayWithArray:array];
+}
+
+- (nonnull instancetype)arrayByRemovingObjectsAtIndexes:(nonnull NSIndexSet *)indexSet {
+    NSMutableArray *array = [self mutableCopy];
+    [array removeObjectsAtIndexes:indexSet];
     return [NSArray arrayWithArray:array];
 }
 
