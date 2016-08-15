@@ -205,6 +205,7 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark - // DEFINITIONS (UITableViewCell) //
 
 @interface UITableViewCell (KMHGenerics)
+@property (nonatomic, strong, nullable) NSIndexPath *indexPath;
 + (nonnull instancetype)cellWithReuseIdentifier:(nullable NSString *)reuseIdentifier style:(UITableViewCellStyle)style tableView:(nonnull UITableView *)tableView atIndexPath:(nonnull NSIndexPath *)indexPath fromStoryboard:(BOOL)fromStoryboard;
 + (CGFloat)defaultHeight;
 @end
