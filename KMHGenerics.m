@@ -710,16 +710,66 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @implementation NSObject (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark Setters and Getters
 
-- (void)setup
-{
-    // no implementation by design – to be used by subclass
+- (void)setSetupComplete:(BOOL)setupComplete {
+    objc_setAssociatedObject(self, @selector(setupComplete), @(setupComplete), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)teardown
-{
-    // no implementation by design – to be used by subclass
+- (BOOL)setupComplete {
+    NSNumber *setupCompleteValue = objc_getAssociatedObject(self, @selector(setupComplete));
+    if (setupCompleteValue) {
+        return setupCompleteValue.boolValue;
+    }
+    
+    self.setupComplete = NO;
+    return self.setupComplete;
+}
+
+- (void)setTeardownComplete:(BOOL)teardownComplete {
+    objc_setAssociatedObject(self, @selector(teardownComplete), @(teardownComplete), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)teardownComplete {
+    NSNumber *teardownCompleteValue = objc_getAssociatedObject(self, @selector(teardownComplete));
+    if (teardownCompleteValue) {
+        return teardownCompleteValue.boolValue;
+    }
+    
+    self.teardownComplete = NO;
+    return self.teardownComplete;
+}
+
+#pragma mark Public Methods
+
+- (void)setup {
+    [self setup:nil];
+}
+
+- (void)teardown {
+    [self teardown:nil];
+}
+
+- (void)setup:(nullable void(^)(void))block {
+    if (self.setupComplete) {
+        return;
+    }
+    
+    if (block) {
+        block();
+    }
+    self.setupComplete = YES;
+}
+
+- (void)teardown:(nullable void(^)(void))block {
+    if (self.teardownComplete) {
+        return;
+    }
+    
+    if (block) {
+        block();
+    }
+    self.teardownComplete = YES;
 }
 
 @end

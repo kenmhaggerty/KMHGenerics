@@ -108,6 +108,8 @@ NS_REQUIRES_NIL_TERMINATION;
 @interface NSObject (KMHGenerics)
 - (void)setup;
 - (void)teardown;
+- (void)setup:(nullable void(^)(void))block;
+- (void)teardown:(nullable void(^)(void))block;
 @end
 
 #pragma mark - // DEFINITIONS (NSOrderedSet) //
