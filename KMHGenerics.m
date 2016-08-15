@@ -60,7 +60,9 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians);
     }
     
     // NSDictionary
-    if ([object1 isKindOfClass:[NSDictionary class]] && [object2 isKindOfClass:[NSDictionary class]]) return [object1 isEqualToDictionary:object2];
+    if ([object1 isKindOfClass:[NSDictionary class]] && [object2 isKindOfClass:[NSDictionary class]]) {
+        return [object1 isEqualToDictionary:object2];
+    }
     
     // NSHashTable
     if ([object1 isKindOfClass:[NSHashTable class]] && [object2 isKindOfClass:[NSHashTable class]]) {
@@ -278,8 +280,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     NSMutableArray *array = [NSMutableArray array];
     va_list objs;
     va_start(objs, firstObj);
-    for (id obj = firstObj; obj != nil; obj = va_arg(objs, id))
-    {
+    for (id obj = firstObj; obj != nil; obj = va_arg(objs, id)) {
         [array addObject:obj];
     }
     va_end(objs);
