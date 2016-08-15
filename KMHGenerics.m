@@ -848,6 +848,22 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
+#pragma mark - // IMPLEMENTATION (UIButton) //
+
+@implementation UIButton (KMHGenerics)
+
+#pragma mark Public Methods
+
+- (void)setText:(NSString *)text {
+    [self setTitle:text forState:UIControlStateNormal];
+    [self setTitle:text forState:UIControlStateHighlighted];
+    [self setTitle:text forState:UIControlStateDisabled];
+    [self setTitle:text forState:UIControlStateSelected];
+    [self setTitle:text forState:UIControlStateFocused];
+}
+
+@end
+
 #pragma mark - // IMPLEMENTATION (UICollectionViewCell) //
 
 @implementation UICollectionViewCell (KMHGenerics)

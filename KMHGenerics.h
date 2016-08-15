@@ -148,6 +148,12 @@ NS_REQUIRES_NIL_TERMINATION;
 + (nonnull instancetype)cellWithReuseIdentifier:(nullable NSString *)reuseIdentifier collectionView:(nonnull UICollectionView *)collectionView atIndexPath:(nonnull NSIndexPath *)indexPath;
 @end
 
+#pragma mark - // DEFINITIONS (UIButton) //
+
+@interface UIButton (KMHGenerics)
+- (void)setText:(nullable NSString *)text;
+@end
+
 #pragma mark - // DEFINITIONS (UIColor) //
 
 @interface UIColor (KMHGenerics)
