@@ -985,6 +985,14 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark Public Methods
 
+- (void)refresh:(nullable void (^)(void))block {
+    [self beginUpdates];
+    if (block) {
+        block();
+    }
+    [self endUpdates];
+}
+
 - (void)moveRowsAtIndexPaths:(NSArray <NSIndexPath *> *)indexPaths toIndexPaths:(NSArray <NSIndexPath *> *)newIndexPaths {
     NSAssert(indexPaths.count == newIndexPaths.count, @"%@ and %@ must have the same number of items", stringFromVariable(indexPaths), stringFromVariable(newIndexPaths));
     

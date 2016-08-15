@@ -189,6 +189,7 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark - // DEFINITIONS (UITableView) //
 
 @interface UITableView (KMHGenerics)
+- (void)refresh:(nullable void (^)(void))block;
 - (void)moveRowsAtIndexPaths:(nonnull NSArray <NSIndexPath *> *)indexPaths toIndexPaths:(nonnull NSArray <NSIndexPath *> *)newIndexPaths;
 - (void)updateSection:(NSUInteger)section
              withData:(nonnull NSArray *)data
