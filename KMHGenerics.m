@@ -967,6 +967,18 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
+#pragma mark - // IMPLEMENTATION (UISegmentedControl) //
+
+@implementation UISegmentedControl (KMHGenerics)
+
+#pragma mark Public Methods
+
+- (nullable NSString *)selectedSegmentTitle {
+    return [self titleForSegmentAtIndex:self.selectedSegmentIndex];
+}
+
+@end
+
 #pragma mark - // IMPLEMENTATION (UITableView) //
 
 @implementation UITableView (KMHGenerics)

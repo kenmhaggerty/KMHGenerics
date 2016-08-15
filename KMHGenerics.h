@@ -180,6 +180,12 @@ NS_REQUIRES_NIL_TERMINATION;
 - (void)scrollToView:(nonnull UIView *)view animated:(BOOL)animated;
 @end
 
+#pragma mark - // DEFINITIONS (UISegmentedControl) //
+
+@interface UISegmentedControl (KMHGenerics)
+- (nullable NSString *)selectedSegmentTitle;
+@end
+
 #pragma mark - // DEFINITIONS (UITableView) //
 
 @interface UITableView (KMHGenerics)
