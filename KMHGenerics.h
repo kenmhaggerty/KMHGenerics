@@ -143,7 +143,6 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark - // DEFINITIONS (UIAlertController) //
 
 @interface UIAlertController (KMHGenerics)
-@property (nonatomic, strong, nullable) NSDictionary *userInfo;
 + (nonnull instancetype)alertControllerWithTitle:(nullable NSString *)title message:(nullable NSString *)message preferredStyle:(UIAlertControllerStyle)preferredStyle actions:(nullable NSArray <NSString *> *)actions preferredAction:(nullable NSString *)preferredAction dismissalText:(nullable NSString *)dismissalText completion:(nullable void(^)(UIAlertAction * _Nonnull action, NSArray <UITextField *> * _Nonnull textFields))completionBlock;
 - (void)clearTextFields;
 @end
@@ -249,6 +248,7 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark - // DEFINITIONS (UIViewController) //
 
 @interface UIViewController (KMHGenerics)
+@property (nonatomic, strong, nullable) NSDictionary *info;
 - (void)performBlockOnChildViewControllers:(nonnull void (^)(UIViewController * _Nonnull childViewController))block;
 - (void)presentError:(nonnull NSError *)error;
 - (void)popViewControllerAnimated:(BOOL)animated;

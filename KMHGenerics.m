@@ -879,14 +879,6 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark Public Methods
 
-- (void)setUserInfo:(nullable NSDictionary *)userInfo {
-    objc_setAssociatedObject(self, @selector(userInfo), userInfo, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (nullable NSDictionary *)userInfo {
-    return objc_getAssociatedObject(self, @selector(userInfo));
-}
-
 + (nonnull instancetype)alertControllerWithTitle:(nullable NSString *)title message:(nullable NSString *)message preferredStyle:(UIAlertControllerStyle)preferredStyle actions:(nullable NSArray <NSString *> *)actions preferredAction:(nullable NSString *)preferredAction dismissalText:(nullable NSString *)dismissalText completion:(nullable void(^)(UIAlertAction * _Nonnull action, NSArray <UITextField *> * _Nonnull textFields))completionBlock {
     UIAlertController *alertController = [[self class] alertControllerWithTitle:title message:message preferredStyle:preferredStyle];
     if (dismissalText || !actions) {
@@ -1534,6 +1526,16 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
 #pragma mark - // IMPLEMENTATION (UIViewController) //
 
 @implementation UIViewController (KMHGenerics)
+
+#pragma mark Setters and Getters
+
+- (void)setInfo:(nullable NSDictionary *)info {
+    objc_setAssociatedObject(self, @selector(info), info, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (nullable NSDictionary *)info {
+    return objc_getAssociatedObject(self, @selector(info));
+}
 
 #pragma mark Public Methods
 
