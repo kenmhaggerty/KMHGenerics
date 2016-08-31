@@ -818,6 +818,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return [[self class] setWithSet:mutableSet];
 }
 
+- (nonnull NSArray *)sortedArrayUsingComparator:(nonnull NSComparator)cmptr {
+    NSArray *array = [self allObjects];
+    return [array sortedArrayUsingComparator:cmptr];
+}
+
 @end
 
 #pragma mark - // IMPLEMENTATION (NSString) //

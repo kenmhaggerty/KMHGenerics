@@ -125,6 +125,7 @@ NS_REQUIRES_NIL_TERMINATION;
 @interface NSSet (KMHGenerics)
 - (nonnull instancetype)setByRemovingObject:(nonnull id)anObject;
 - (nonnull instancetype)setBySubtractingSet:(nonnull NSSet *)set;
+- (nonnull NSArray *)sortedArrayUsingComparator:(nonnull NSComparator)cmptr;
 @end
 
 #pragma mark - // DEFINITIONS (NSString) //
