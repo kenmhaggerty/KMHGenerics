@@ -1019,6 +1019,36 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
+#pragma mark - // IMPLEMENTATION (UIImageView) //
+
+NSString * _Nonnull const UIImageViewImageDidChangeNotification = @"kUIImageViewImageDidChangeNotification";
+
+@implementation UIImageView (KMHGenerics)
+
+#pragma mark Private Methods
+
++ (void)load {
+    Method original, swizzled;
+    original = class_getInstanceMethod(self, @selector(setImage:));
+    swizzled = class_getInstanceMethod(self, @selector(swizzled_setImage:));
+    method_exchangeImplementations(original, swizzled);
+}
+
+- (void)swizzled_setImage:(UIImage *)image {
+    UIImage *primitiveImage = self.image;
+    
+    [self swizzled_setImage:image];
+    
+    if ([KMHGenerics object:image isEqualToObject:primitiveImage]) {
+        return;
+    }
+    
+    NSDictionary *userInfo = image ? @{NOTIFICATION_OBJECT_KEY : image} : @{};
+    [NSNotificationCenter postNotificationToMainThread:UIImageViewImageDidChangeNotification object:self userInfo:userInfo];
+}
+
+@end
+
 #pragma mark - // IMPLEMENTATION (UINavigationBar) //
 
 @implementation UINavigationBar (KMHGenerics)

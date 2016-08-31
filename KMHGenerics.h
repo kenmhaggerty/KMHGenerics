@@ -176,6 +176,10 @@ NS_REQUIRES_NIL_TERMINATION;
 - (nonnull instancetype)croppedImageWithFrame:(CGRect)frame;
 @end
 
+#pragma mark - // DEFINITIONS (UIImageView) //
+
+extern NSString * _Nonnull const UIImageViewImageDidChangeNotification;
+
 #pragma mark - // DEFINITIONS (UINavigationBar) //
 
 @interface UINavigationBar (KMHGenerics)
