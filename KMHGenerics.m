@@ -1663,6 +1663,20 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
     return objc_getAssociatedObject(self, @selector(info));
 }
 
+- (void)setIsModal:(BOOL)isModal {
+    objc_setAssociatedObject(self, @selector(isModal), @(isModal), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)isModal {
+    NSNumber *isModalValue = objc_getAssociatedObject(self, @selector(isModal));
+    if (isModalValue) {
+        return isModalValue.boolValue;
+    }
+    
+    self.isModal = NO;
+    return self.isModal;
+}
+
 #pragma mark Public Methods
 
 - (void)performBlockOnChildViewControllers:(void (^)(UIViewController *childViewController))block {

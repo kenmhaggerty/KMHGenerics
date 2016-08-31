@@ -267,6 +267,7 @@ extern NSString * _Nonnull const UINavigationItemTitleDidChangeNotification;
 
 @interface UIViewController (KMHGenerics)
 @property (nonatomic, strong, nullable) NSDictionary *info;
+@property (nonatomic) BOOL isModal;
 - (void)performBlockOnChildViewControllers:(nonnull void (^)(UIViewController * _Nonnull childViewController))block;
 - (void)presentError:(nonnull NSError *)error;
 - (void)popOrDismissViewControllerAnimated:(BOOL)animated;
