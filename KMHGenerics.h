@@ -186,6 +186,14 @@ extern NSString * _Nonnull const UIImageViewImageDidChangeNotification;
 + (CGFloat)height;
 @end
 
+#pragma mark - // DEFINITIONS (UINavigationController) //
+
+extern NSString * _Nonnull const UINavigationControllerViewControllersDidChangeNotification;
+
+@interface UINavigationController (KMHGenerics)
+- (nullable UIViewController *)rootViewController;
+@end
+
 #pragma mark - // DEFINITIONS (UINavigationItem) //
 
 extern NSString * _Nonnull const UINavigationItemTitleDidChangeNotification;
