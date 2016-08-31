@@ -48,6 +48,7 @@ NS_REQUIRES_NIL_TERMINATION;
 + (nonnull instancetype)arrayWithValue:(float)value increment:(float)increment length:(NSUInteger)length;
 + (nonnull instancetype)arrayWithStartValue:(NSInteger)startValue endValue:(NSUInteger)endValue;
 + (nonnull instancetype)arrayWithLength:(NSUInteger)length block:(nonnull id _Nonnull (^)(NSUInteger index))block;
+- (nonnull instancetype)arrayByInsertingObject:(nonnull id)anObject atIndex:(NSUInteger)index;
 - (nonnull instancetype)arrayByRemovingObject:(nonnull id)anObject;
 - (nonnull instancetype)arrayByRemovingObjectsInArray:(nonnull NSArray *)otherArray;
 - (nonnull instancetype)arrayByRemovingObjectsAtIndexes:(nonnull NSIndexSet *)indexSet;
