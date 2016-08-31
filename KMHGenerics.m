@@ -1141,6 +1141,28 @@ NSString * const UINavigationItemTitleDidChangeNotification = @"kUINavigationIte
 
 @end
 
+#pragma mark - // IMPLEMENTATION (UIStoryboardSegue) //
+
+@implementation UIStoryboardSegue (KMHGenerics)
+
+#pragma mark Public Methods
+
+- (nullable UIViewController *)contentDestinationViewController {
+    if ([self.destinationViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *navigationController = (UINavigationController *)self.destinationViewController;
+        return navigationController.topViewController;
+    }
+    
+    if ([self.destinationViewController isKindOfClass:[UITabBarController class]]) {
+        UITabBarController *tabBarController = (UITabBarController *)self.destinationViewController;
+        return tabBarController.selectedViewController;
+    }
+    
+    return self.destinationViewController;
+}
+
+@end
+
 #pragma mark - // IMPLEMENTATION (UITableView) //
 
 @implementation UITableView (KMHGenerics)

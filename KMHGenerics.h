@@ -202,6 +202,12 @@ extern NSString * _Nonnull const UINavigationItemTitleDidChangeNotification;
 - (nullable NSString *)selectedSegmentTitle;
 @end
 
+#pragma mark - // DEFINITIONS (UIStoryboardSegue) //
+
+@interface UIStoryboardSegue (KMHGenerics)
+- (nullable UIViewController *)contentDestinationViewController;
+@end
+
 #pragma mark - // DEFINITIONS (UITableView) //
 
 @interface UITableView (KMHGenerics)
