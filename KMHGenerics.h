@@ -269,5 +269,5 @@ extern NSString * _Nonnull const UINavigationItemTitleDidChangeNotification;
 @property (nonatomic, strong, nullable) NSDictionary *info;
 - (void)performBlockOnChildViewControllers:(nonnull void (^)(UIViewController * _Nonnull childViewController))block;
 - (void)presentError:(nonnull NSError *)error;
-- (void)popViewControllerAnimated:(BOOL)animated;
+- (void)popOrDismissViewControllerAnimated:(BOOL)animated;
 @end

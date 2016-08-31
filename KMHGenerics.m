@@ -1685,13 +1685,15 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)popViewControllerAnimated:(BOOL)animated {
-    if (self.navigationController) {
-        [self.navigationController popViewControllerAnimated:animated];
+- (void)popOrDismissViewControllerAnimated:(BOOL)animated {
+    if (self.navigationController && ![self.navigationController.rootViewController isEqual:self]) {
+        NSUInteger index = [self.navigationController.viewControllers indexOfObject:self];
+        UIViewController *viewController = self.navigationController.viewControllers[index-1];
+        [self.navigationController popToViewController:viewController animated:animated];
+        return;
     }
-    else {
-        [self dismissViewControllerAnimated:animated completion:nil];
-    }
+    
+    [self dismissViewControllerAnimated:animated completion:nil];
 }
 
 @end
