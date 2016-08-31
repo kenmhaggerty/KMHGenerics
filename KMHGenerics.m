@@ -1357,6 +1357,13 @@ NSString * const UINavigationItemTitleDidChangeNotification = @"kUINavigationIte
     }
 }
 
+- (void)tapRowAtIndexPath:(nullable NSIndexPath *)indexPath animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition {
+    [self selectRowAtIndexPath:indexPath animated:animated scrollPosition:scrollPosition];
+    if ([self.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+        [self.delegate tableView:self didSelectRowAtIndexPath:indexPath];
+    }
+}
+
 @end
 
 #pragma mark - // IMPLEMENTATION (UITableViewCell) //

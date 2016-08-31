@@ -223,6 +223,7 @@ extern NSString * _Nonnull const UINavigationItemTitleDidChangeNotification;
        reorderedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))reorderingBlock
          deletedCells:(nullable void (^)(NSArray <UITableViewCell *> * _Nonnull cells))deletionBlock
            completion:(nullable void (^)(void))completionBlock;
+- (void)tapRowAtIndexPath:(nullable NSIndexPath *)indexPath animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition;
 @end
 
 #pragma mark - // DEFINITIONS (UITableViewCell) //
