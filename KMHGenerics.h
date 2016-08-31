@@ -157,6 +157,9 @@ NS_REQUIRES_NIL_TERMINATION;
 
 @interface UIButton (KMHGenerics)
 - (void)setText:(nullable NSString *)text;
+- (nullable NSString *)text;
+- (void)setImage:(nullable UIImage *)image;
+- (nullable UIImage *)image;
 @end
 
 #pragma mark - // DEFINITIONS (UIColor) //
