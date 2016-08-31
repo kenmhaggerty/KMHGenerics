@@ -1031,6 +1031,57 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
+#pragma mark - // IMPLEMENTATION (UINavigationItem) //
+
+NSString * const UINavigationItemTitleDidChangeNotification = @"kUINavigationItemTitleDidChangeNotification";
+
+@implementation UINavigationItem (KMHGenerics)
+
+// copied via Mattt Thompson's tutorial at http://nshipster.com/method-swizzling/
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Class class = [self class];
+        
+        SEL originalSelector = @selector(setTitle:);
+        SEL swizzledSelector = @selector(swizzled_setTitle:);
+        
+        Method originalMethod = class_getInstanceMethod(class, originalSelector);
+        Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
+        
+        // When swizzling a class method, use the following:
+        // Class class = object_getClass((id)self);
+        // ...
+        // Method originalMethod = class_getClassMethod(class, originalSelector);
+        // Method swizzledMethod = class_getClassMethod(class, swizzledSelector);
+        
+        BOOL didAddMethod =
+        class_addMethod(class,
+                        originalSelector,
+                        method_getImplementation(swizzledMethod),
+                        method_getTypeEncoding(swizzledMethod));
+        
+        if (didAddMethod) {
+            class_replaceMethod(class,
+                                swizzledSelector,
+                                method_getImplementation(originalMethod),
+                                method_getTypeEncoding(originalMethod));
+        }
+        else {
+            method_exchangeImplementations(originalMethod, swizzledMethod);
+        }
+    });
+}
+
+- (void)swizzled_setTitle:(NSString *)title {
+    [self swizzled_setTitle:title];
+    
+    NSDictionary *userInfo = title ? @{NOTIFICATION_OBJECT_KEY : title} : @{};
+    [NSNotificationCenter postNotificationToMainThread:UINavigationItemTitleDidChangeNotification object:self userInfo:userInfo];
+}
+
+@end
+
 #pragma mark - // IMPLEMENTATION (UIScrollView) //
 
 @implementation UIScrollView (KMHGenerics)

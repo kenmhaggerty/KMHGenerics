@@ -182,6 +182,10 @@ NS_REQUIRES_NIL_TERMINATION;
 + (CGFloat)height;
 @end
 
+#pragma mark - // DEFINITIONS (UINavigationItem) //
+
+extern NSString * _Nonnull const UINavigationItemTitleDidChangeNotification;
+
 #pragma mark - // DEFINITIONS (UIScrollView) //
 
 @interface UIScrollView (KMHGenerics)
