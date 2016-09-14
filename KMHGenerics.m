@@ -1881,6 +1881,14 @@ NSString * const KMHImagePickerSourceSelectorCameraRoll = @"Camera Roll";
 
 #pragma mark Public Methods
 
+- (BOOL)isForceTouchEnabled {
+    if (![self.traitCollection respondsToSelector:@selector(forceTouchCapability)]) {
+        return NO;
+    }
+    
+    return (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable);
+}
+
 - (void)performBlockOnChildViewControllers:(void (^)(UIViewController *childViewController))block {
     NSMutableArray <UIViewController *> *childViewControllers = [NSMutableArray arrayWithArray:self.childViewControllers];
     UIViewController *childViewController;
