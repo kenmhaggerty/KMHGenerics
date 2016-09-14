@@ -932,6 +932,29 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     self.teardownComplete = YES;
 }
 
+#pragma mark Private Methods
+
+// copied w/ modifications via Mattt Thompson's tutorial at http://nshipster.com/method-swizzling/
+- (void)swizzleMethod:(SEL)originalSelector withMethod:(SEL)swizzledSelector {
+    Class class = [self class];
+    Method originalMethod = class_getInstanceMethod(class, originalSelector);
+    Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
+    
+    // When swizzling a class method, use the following:
+    // Class class = object_getClass((id)self);
+    // ...
+    // Method originalMethod = class_getClassMethod(class, originalSelector);
+    // Method swizzledMethod = class_getClassMethod(class, swizzledSelector);
+    
+    BOOL success = class_addMethod(class, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
+    if (success) {
+        class_replaceMethod(class, swizzledSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod));
+    }
+    else {
+        method_exchangeImplementations(originalMethod, swizzledMethod);
+    }
+}
+
 @end
 
 #pragma mark - // IMPLEMENTATION (NSOrderedSet) //
@@ -1182,10 +1205,10 @@ NSString * _Nonnull const UIImageViewImageDidChangeNotification = @"kUIImageView
 #pragma mark Private Methods
 
 + (void)load {
-    Method original, swizzled;
-    original = class_getInstanceMethod(self, @selector(setImage:));
-    swizzled = class_getInstanceMethod(self, @selector(swizzled_setImage:));
-    method_exchangeImplementations(original, swizzled);
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self swizzleMethod:@selector(setImage:) withMethod:@selector(swizzled_setImage:)];
+    });
 }
 
 - (void)swizzled_setImage:(UIImage *)image {
@@ -1232,16 +1255,12 @@ NSString * const UINavigationControllerViewControllersDidChangeNotification = @"
 #pragma mark Private Methods
 
 + (void)load {
-    Method original, swizzled;
-    original = class_getInstanceMethod(self, @selector(setViewControllers:));
-    swizzled = class_getInstanceMethod(self, @selector(swizzled_setViewControllers:));
-    method_exchangeImplementations(original, swizzled);
-    original = class_getInstanceMethod(self, @selector(pushViewController:animated:));
-    swizzled = class_getInstanceMethod(self, @selector(swizzled_pushViewController:animated:));
-    method_exchangeImplementations(original, swizzled);
-    original = class_getInstanceMethod(self, @selector(popViewControllerAnimated:));
-    swizzled = class_getInstanceMethod(self, @selector(swizzled_popViewControllerAnimated:));
-    method_exchangeImplementations(original, swizzled);
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self swizzleMethod:@selector(setViewControllers:) withMethod:@selector(swizzled_setViewControllers:)];
+        [self swizzleMethod:@selector(pushViewController:animated:) withMethod:@selector(swizzled_pushViewController:animated:)];
+        [self swizzleMethod:@selector(popViewControllerAnimated:) withMethod:@selector(swizzled_popViewControllerAnimated:)];
+    });
 }
 
 - (void)swizzled_setViewControllers:(NSArray <UIViewController *> *)viewControllers {
@@ -1279,39 +1298,12 @@ NSString * const UINavigationItemTitleDidChangeNotification = @"kUINavigationIte
 
 @implementation UINavigationItem (KMHGenerics)
 
-// copied via Mattt Thompson's tutorial at http://nshipster.com/method-swizzling/
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        Class class = [self class];
-        
-        SEL originalSelector = @selector(setTitle:);
-        SEL swizzledSelector = @selector(swizzled_setTitle:);
-        
-        Method originalMethod = class_getInstanceMethod(class, originalSelector);
-        Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
-        
-        // When swizzling a class method, use the following:
-        // Class class = object_getClass((id)self);
-        // ...
-        // Method originalMethod = class_getClassMethod(class, originalSelector);
-        // Method swizzledMethod = class_getClassMethod(class, swizzledSelector);
-        
-        BOOL didAddMethod =
-        class_addMethod(class,
-                        originalSelector,
-                        method_getImplementation(swizzledMethod),
-                        method_getTypeEncoding(swizzledMethod));
-        
-        if (didAddMethod) {
-            class_replaceMethod(class,
-                                swizzledSelector,
-                                method_getImplementation(originalMethod),
-                                method_getTypeEncoding(originalMethod));
-        }
-        else {
-            method_exchangeImplementations(originalMethod, swizzledMethod);
-        }
+        [self swizzleMethod:@selector(setPrompt:) withMethod:@selector(swizzled_setPrompt:)];
+        [self swizzleMethod:@selector(setTitle:) withMethod:@selector(swizzled_setTitle:)];
+        [self swizzleMethod:@selector(setRightBarButtonItems:) withMethod:@selector(swizzled_setRightBarButtonItems:)];
     });
 }
 
