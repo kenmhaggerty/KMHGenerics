@@ -2073,6 +2073,11 @@ NSString * const KMHImagePickerSourceSelectorCameraRoll = @"Camera Roll";
         return;
     }
     
+    if (self.parentViewController) {
+        [self.parentViewController popOrDismissViewControllerAnimated:animated];
+        return;
+    }
+    
     [self dismissViewControllerAnimated:animated completion:nil];
 }
 
