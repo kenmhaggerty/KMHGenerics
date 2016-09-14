@@ -213,6 +213,10 @@ extern NSString * _Nonnull const UINavigationItemPromptDidChangeNotification;
 extern NSString * _Nonnull const UINavigationItemTitleDidChangeNotification;
 extern NSString * _Nonnull const UINavigationItemRightBarButtonItemsDidChangeNotification;
 
+@interface UINavigationItem (KMHGenerics)
+@property (nonatomic) BOOL rightBarButtonItemsVisible;
+@end
+
 #pragma mark - // DEFINITIONS (UIScrollView) //
 
 @interface UIScrollView (KMHGenerics)

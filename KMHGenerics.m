@@ -1315,6 +1315,43 @@ NSString * _Nonnull const UINavigationItemRightBarButtonItemsDidChangeNotificati
 
 @implementation UINavigationItem (KMHGenerics)
 
+#pragma mark Setters and Getters
+
+- (void)setRightBarButtonItemsVisible:(BOOL)rightBarButtonItemsVisible {
+    if (rightBarButtonItemsVisible) {
+        objc_setAssociatedObject(self, @selector(rightBarButtonItemsVisible), @(rightBarButtonItemsVisible), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        self.rightBarButtonItems = self.storedRightBarButtonItems;
+        self.storedRightBarButtonItems = nil;
+    }
+    else {
+        self.storedRightBarButtonItems = self.rightBarButtonItems;
+        self.rightBarButtonItems = nil;
+        objc_setAssociatedObject(self, @selector(rightBarButtonItemsVisible), @(rightBarButtonItemsVisible), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+}
+
+- (BOOL)rightBarButtonItemsVisible {
+    NSNumber *visibleValue = objc_getAssociatedObject(self, @selector(rightBarButtonItemsVisible));
+    if (visibleValue) {
+        return visibleValue.boolValue;
+    }
+    
+    objc_setAssociatedObject(self, @selector(rightBarButtonItemsVisible), @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    return self.rightBarButtonItemsVisible;
+}
+
+- (void)setStoredRightBarButtonItems:(NSArray <UIBarButtonItem *> *)storedRightBarButtonItems {
+    objc_setAssociatedObject(self, @selector(storedRightBarButtonItems), storedRightBarButtonItems, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSArray <UIBarButtonItem *> *)storedRightBarButtonItems {
+    return objc_getAssociatedObject(self, @selector(storedRightBarButtonItems));
+}
+
+#pragma mark Public Methods
+
+#pragma mark Overwritten Methods
+
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -1322,6 +1359,10 @@ NSString * _Nonnull const UINavigationItemRightBarButtonItemsDidChangeNotificati
         [self swizzleMethod:@selector(setTitle:) withMethod:@selector(swizzled_setTitle:)];
         [self swizzleMethod:@selector(setRightBarButtonItems:) withMethod:@selector(swizzled_setRightBarButtonItems:)];
     });
+}
+
+- (void)setRightBarButtonItem:(UIBarButtonItem *)rightBarButtonItem {
+    self.rightBarButtonItems = rightBarButtonItem ? @[rightBarButtonItem] : nil;
 }
 
 #pragma mark Private Methods
@@ -1345,11 +1386,16 @@ NSString * _Nonnull const UINavigationItemRightBarButtonItemsDidChangeNotificati
 }
 
 - (void)swizzled_setRightBarButtonItems:(NSArray <UIBarButtonItem *> *)rightBarButtonItems {
+    if (self.rightBarButtonItemsVisible) {
+        [self swizzled_setRightBarButtonItems:rightBarButtonItems];
+    }
+    else {
+        self.storedRightBarButtonItems = rightBarButtonItems;
+    }
+    
     if ([KMHGenerics object:rightBarButtonItems isEqualToObject:self.rightBarButtonItems]) {
         return;
     }
-    
-    [self swizzled_setRightBarButtonItems:rightBarButtonItems];
     
     NSDictionary *userInfo = rightBarButtonItems ? @{NOTIFICATION_OBJECT_KEY : rightBarButtonItems} : @{};
     [NSNotificationCenter postNotificationToMainThread:UINavigationItemRightBarButtonItemsDidChangeNotification object:self userInfo:userInfo];
