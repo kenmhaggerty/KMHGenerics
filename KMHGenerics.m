@@ -1408,7 +1408,7 @@ NSString * const UINavigationItemTitleDidChangeNotification = @"kUINavigationIte
     [CATransaction setValue:@YES forKey:@"cancelled"];
     [self.layer removeAllAnimations];
     
-    NSArray *fromArray = getter();
+    NSArray *fromArray = getter() ?: [NSArray array];
     
     // DELETION //
     
