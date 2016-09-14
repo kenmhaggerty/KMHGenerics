@@ -1900,6 +1900,8 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
 
 #pragma mark Definitions (Private)
 
+NSString * _Nonnull const UIViewControllerEditingDidChangeNotification = @"kUIViewControllerEditingDidChangeNotification";
+
 NSString * const KMHImagePickerSourceSelectorCameraPhoto = @"Take Photo";
 NSString * const KMHImagePickerSourceSelectorCameraVideo = @"Take Video";
 NSString * const KMHImagePickerSourceSelectorCameraPhotoOrVideo = @"Take Photo or Video";
@@ -2025,6 +2027,24 @@ NSString * const KMHImagePickerSourceSelectorCameraRoll = @"Camera Roll";
 }
 
 #pragma mark Private Methods
+
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self swizzleMethod:@selector(setEditing:) withMethod:@selector(swizzled_setEditing:)];
+    });
+}
+
+- (void)swizzled_setEditing:(BOOL)editing {
+    if (editing == self.editing) {
+        return;
+    }
+    
+    [self swizzled_setEditing:editing];
+    
+    NSDictionary *userInfo = @{NOTIFICATION_OBJECT_KEY : @(editing)};
+    [NSNotificationCenter postNotificationToMainThread:UIViewControllerEditingDidChangeNotification object:self userInfo:userInfo];
+}
 
 - (void)presentCamera:(UIImagePickerControllerCameraDevice)camera withMediaType:(KMHMediaType)mediaType delegate:(id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>)delegate setup:(void (^)(UIImagePickerController *cameraController))setupBlock completion:(void (^)(UIImagePickerController *cameraController))completionBlock {
     UIImagePickerController *cameraController = [[UIImagePickerController alloc] init];

@@ -288,6 +288,10 @@ extern NSString * _Nonnull const UINavigationItemRightBarButtonItemsDidChangeNot
 
 #pragma mark - // DEFINITIONS (UIViewController) //
 
+#pragma mark Notifications
+
+extern NSString * _Nonnull const UIViewControllerEditingDidChangeNotification;
+
 #pragma mark Protocols
 
 @protocol KMHImageSourceSelectorDelegate <NSObject>
