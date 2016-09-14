@@ -209,7 +209,9 @@ extern NSString * _Nonnull const UINavigationControllerViewControllersDidChangeN
 
 #pragma mark - // DEFINITIONS (UINavigationItem) //
 
+extern NSString * _Nonnull const UINavigationItemPromptDidChangeNotification;
 extern NSString * _Nonnull const UINavigationItemTitleDidChangeNotification;
+extern NSString * _Nonnull const UINavigationItemRightBarButtonItemsDidChangeNotification;
 
 #pragma mark - // DEFINITIONS (UIScrollView) //
 

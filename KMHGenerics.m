@@ -1307,7 +1307,11 @@ NSString * const UINavigationControllerViewControllersDidChangeNotification = @"
 
 #pragma mark - // IMPLEMENTATION (UINavigationItem) //
 
-NSString * const UINavigationItemTitleDidChangeNotification = @"kUINavigationItemTitleDidChangeNotification";
+#pragma mark Definitions (Private)
+
+NSString * _Nonnull const UINavigationItemPromptDidChangeNotification = @"kUINavigationItemPromptDidChangeNotification";
+NSString * _Nonnull const UINavigationItemTitleDidChangeNotification = @"kUINavigationItemTitleDidChangeNotification";
+NSString * _Nonnull const UINavigationItemRightBarButtonItemsDidChangeNotification = @"kUINavigationItemRightBarButtonItemsDidChangeNotification";
 
 @implementation UINavigationItem (KMHGenerics)
 
@@ -1320,11 +1324,35 @@ NSString * const UINavigationItemTitleDidChangeNotification = @"kUINavigationIte
     });
 }
 
+#pragma mark Private Methods
+
+- (void)swizzled_setPrompt:(NSString *)prompt {
+    if ([KMHGenerics object:prompt isEqualToObject:self.prompt]) {
+        return;
+    }
+    
+    [self swizzled_setPrompt:prompt];
+    
+    NSDictionary *userInfo = prompt ? @{NOTIFICATION_OBJECT_KEY : prompt} : @{};
+    [NSNotificationCenter postNotificationToMainThread:UINavigationItemPromptDidChangeNotification object:self userInfo:userInfo];
+}
+
 - (void)swizzled_setTitle:(NSString *)title {
     [self swizzled_setTitle:title];
     
     NSDictionary *userInfo = title ? @{NOTIFICATION_OBJECT_KEY : title} : @{};
     [NSNotificationCenter postNotificationToMainThread:UINavigationItemTitleDidChangeNotification object:self userInfo:userInfo];
+}
+
+- (void)swizzled_setRightBarButtonItems:(NSArray <UIBarButtonItem *> *)rightBarButtonItems {
+    if ([KMHGenerics object:rightBarButtonItems isEqualToObject:self.rightBarButtonItems]) {
+        return;
+    }
+    
+    [self swizzled_setRightBarButtonItems:rightBarButtonItems];
+    
+    NSDictionary *userInfo = rightBarButtonItems ? @{NOTIFICATION_OBJECT_KEY : rightBarButtonItems} : @{};
+    [NSNotificationCenter postNotificationToMainThread:UINavigationItemRightBarButtonItemsDidChangeNotification object:self userInfo:userInfo];
 }
 
 @end
