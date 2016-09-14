@@ -1379,6 +1379,10 @@ NSString * _Nonnull const UINavigationItemRightBarButtonItemsDidChangeNotificati
 }
 
 - (void)swizzled_setTitle:(NSString *)title {
+    if ([KMHGenerics object:title isEqualToObject:self.title]) {
+        return;
+    }
+    
     [self swizzled_setTitle:title];
     
     NSDictionary *userInfo = title ? @{NOTIFICATION_OBJECT_KEY : title} : @{};
