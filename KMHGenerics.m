@@ -995,6 +995,19 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return [[self class] setWithSet:mutableSet];
 }
 
+- (nonnull instancetype)setByApplyingBlock:(nonnull _Nonnull id (^)(_Nonnull id))block {
+    NSMutableSet *set = [NSMutableSet set];
+    for (id object in self) {
+        [set addObject:block(object)];
+    }
+    return [NSSet setWithSet:set];
+}
+
+- (nonnull NSOrderedSet *)orderedSetUsingComparator:(nonnull NSComparator)cmptr {
+    NSArray *array = [self sortedArrayUsingComparator:cmptr];
+    return [NSOrderedSet orderedSetWithArray:array];
+}
+
 - (nonnull NSArray *)sortedArrayUsingComparator:(nonnull NSComparator)cmptr {
     NSArray *array = [self allObjects];
     return [array sortedArrayUsingComparator:cmptr];
