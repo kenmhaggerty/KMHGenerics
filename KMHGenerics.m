@@ -1973,7 +1973,7 @@ NSString * const KMHImagePickerSourceSelectorCameraRoll = @"Camera Roll";
 }
 
 - (void)popOrDismissViewControllerAnimated:(BOOL)animated {
-    if (self.navigationController && ![self.navigationController.rootViewController isEqual:self]) {
+    if (self.navigationController && self.parentViewController && [self.navigationController isEqual:self.parentViewController] && ![self.navigationController.rootViewController isEqual:self]) {
         NSUInteger index = [self.navigationController.viewControllers indexOfObject:self];
         UIViewController *viewController = self.navigationController.viewControllers[index-1];
         [self.navigationController popToViewController:viewController animated:animated];
