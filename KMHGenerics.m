@@ -990,8 +990,16 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 }
 
 - (nonnull instancetype)setBySubtractingSet:(nonnull NSSet *)set {
+    if (!self.count || !set.count) {
+        return self;
+    }
+    
     NSMutableSet *mutableSet = [NSMutableSet setWithSet:self];
     [mutableSet minusSet:set];
+    if (!mutableSet.count) {
+        return [[[self class] alloc] init];
+    }
+    
     return [[self class] setWithSet:mutableSet];
 }
 
