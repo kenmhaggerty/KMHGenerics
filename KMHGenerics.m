@@ -1308,6 +1308,18 @@ NSString * _Nonnull const UINavigationItemRightBarButtonItemsDidChangeNotificati
 
 @end
 
+#pragma mark - // IMPLEMENTATION (UIStoryboard) //
+
+@implementation UIStoryboard (KMHGenerics)
+
+#pragma mark Public Methods
+
++ (nullable UIViewController *)storyboard:(nonnull NSString *)name viewControllerWithIdentifier:(nonnull NSString *)identifier {
+    return [[UIStoryboard storyboardWithName:name bundle:nil] instantiateViewControllerWithIdentifier:identifier];
+}
+
+@end
+
 #pragma mark - // IMPLEMENTATION (UIStoryboardSegue) //
 
 @implementation UIStoryboardSegue (KMHGenerics)

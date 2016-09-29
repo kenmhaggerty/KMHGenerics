@@ -220,6 +220,12 @@ extern NSString * _Nonnull const UINavigationItemRightBarButtonItemsDidChangeNot
 - (nullable NSString *)selectedSegmentTitle;
 @end
 
+#pragma mark - // DEFINITIONS (UIStoryboard) //
+
+@interface UIStoryboard (KMHGenerics)
++ (nullable UIViewController *)storyboard:(nonnull NSString *)name viewControllerWithIdentifier:(nonnull NSString *)identifier;
+@end
+
 #pragma mark - // DEFINITIONS (UIStoryboardSegue) //
 
 @interface UIStoryboardSegue (KMHGenerics)
