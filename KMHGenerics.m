@@ -802,7 +802,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 #pragma mark Private Methods
 
 // copied w/ modifications via Mattt Thompson's tutorial at http://nshipster.com/method-swizzling/
-- (void)swizzleMethod:(SEL)originalSelector withMethod:(SEL)swizzledSelector {
+- (void)swizzleMethod:(nonnull SEL)originalSelector withMethod:(nonnull SEL)swizzledSelector {
     Class class = [self class];
     Method originalMethod = class_getInstanceMethod(class, originalSelector);
     Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
