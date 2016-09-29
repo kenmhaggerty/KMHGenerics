@@ -53,12 +53,14 @@ NS_REQUIRES_NIL_TERMINATION;
 - (nonnull instancetype)arrayByRemovingObjectsInArray:(nonnull NSArray *)otherArray;
 - (nonnull instancetype)arrayByRemovingObjectsAtIndexes:(nonnull NSIndexSet *)indexSet;
 - (nonnull instancetype)arrayByRemovingObjectsNotInArray:(nonnull NSArray *)otherArray;
+- (nonnull instancetype)arrayByApplyingBlock:(nonnull _Nullable id (^)(_Nonnull id))block;
 - (nonnull instancetype)sortedArray:(BOOL)ascending;
 - (void)compareToArray:(nonnull NSArray *)newArray andGenerateIndexPathsToInsert:(NSArray * _Nonnull * _Nonnull)indexPaths withSection:(NSUInteger)section;
 - (void)compareToArray:(nonnull NSArray *)newArray andGenerateIndexPaths:(NSArray * _Nonnull * _Nonnull)indexPaths toMoveToIndexPaths:(NSArray * _Nonnull * _Nonnull)newIndexPaths withSection:(NSUInteger)section;
 - (void)compareToArray:(nonnull NSArray *)newArray andGenerateIndexPathsToDelete:(NSArray * _Nonnull * _Nonnull)indexPaths withSection:(NSUInteger)section;
 - (NSUInteger)countObject:(nonnull id)object;
 - (nonnull NSIndexSet *)indexesOfObject:(nonnull id)anObject;
+- (nullable id)penultimateObject;
 @end
 
 #pragma mark - // DEFINITIONS (NSData) //

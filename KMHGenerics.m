@@ -341,6 +341,18 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return [NSArray arrayWithArray:array];
 }
 
+- (nonnull instancetype)arrayByApplyingBlock:(nonnull _Nonnull id (^)(_Nonnull id))block {
+    NSMutableArray *array = [NSMutableArray array];
+    id objectToAdd;
+    for (id object in self) {
+        objectToAdd = block(object);
+        if (objectToAdd) {
+            [array addObject:objectToAdd];
+        }
+    }
+    return [NSArray arrayWithArray:array];
+}
+
 - (nonnull instancetype)sortedArray:(BOOL)ascending {
     return [self sortedArrayUsingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
         NSNumber *value1 = [NSArray sortValueForObject:obj1];
@@ -441,6 +453,14 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
         }
     }
     return indexSet;
+}
+
+- (nullable id)penultimateObject {
+    if (self.count < 2) {
+        return nil;
+    }
+    
+    return self[self.count-2];
 }
 
 #pragma mark Private Methods
