@@ -1101,36 +1101,6 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UIImageView) //
-
-NSString * _Nonnull const UIImageViewImageDidChangeNotification = @"kUIImageViewImageDidChangeNotification";
-
-@implementation UIImageView (KMHGenerics)
-
-#pragma mark Private Methods
-
-+ (void)load {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [self swizzleMethod:@selector(setImage:) withMethod:@selector(swizzled_setImage:)];
-    });
-}
-
-- (void)swizzled_setImage:(UIImage *)image {
-    UIImage *primitiveImage = self.image;
-    
-    [self swizzled_setImage:image];
-    
-    if ([KMHGenerics object:image isEqualToObject:primitiveImage]) {
-        return;
-    }
-    
-    NSDictionary *userInfo = image ? @{NOTIFICATION_OBJECT_KEY : image} : @{};
-    [NSNotificationCenter postNotificationToMainThread:UIImageViewImageDidChangeNotification object:self userInfo:userInfo];
-}
-
-@end
-
 #pragma mark - // IMPLEMENTATION (UINavigationBar) //
 
 @implementation UINavigationBar (KMHGenerics)
@@ -1729,10 +1699,6 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
 
 @implementation UIViewController (KMHGenerics)
 
-#pragma mark Definitions (Private)
-
-NSString * _Nonnull const UIViewControllerEditingDidChangeNotification = @"kUIViewControllerEditingDidChangeNotification";
-
 #pragma mark Setters and Getters
 
 - (void)setInfo:(nullable NSDictionary *)info {
@@ -1814,26 +1780,6 @@ NSString * _Nonnull const UIViewControllerEditingDidChangeNotification = @"kUIVi
     }
     
     [self dismissViewControllerAnimated:animated completion:nil];
-}
-
-#pragma mark Private Methods
-
-+ (void)load {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [self swizzleMethod:@selector(setEditing:) withMethod:@selector(swizzled_setEditing:)];
-    });
-}
-
-- (void)swizzled_setEditing:(BOOL)editing {
-    if (editing == self.editing) {
-        return;
-    }
-    
-    [self swizzled_setEditing:editing];
-    
-    NSDictionary *userInfo = @{NOTIFICATION_OBJECT_KEY : @(editing)};
-    [NSNotificationCenter postNotificationToMainThread:UIViewControllerEditingDidChangeNotification object:self userInfo:userInfo];
 }
 
 @end
