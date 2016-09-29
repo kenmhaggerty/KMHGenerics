@@ -1759,6 +1759,19 @@ NSString * _Nonnull const UIViewControllerEditingDidChangeNotification = @"kUIVi
 
 #pragma mark Public Methods
 
+- (nullable UIViewController *)priorViewController {
+    if (!self.navigationController || ![self.navigationController.viewControllers containsObject:self]) {
+        return nil;
+    }
+    
+    NSUInteger index = [self.navigationController.viewControllers indexOfObject:self];
+    if (!index) {
+        return nil;
+    }
+    
+    return self.navigationController.viewControllers[index-1];
+}
+
 - (BOOL)isForceTouchEnabled {
     if (![self.traitCollection respondsToSelector:@selector(forceTouchCapability)]) {
         return NO;
