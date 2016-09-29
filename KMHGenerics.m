@@ -133,22 +133,6 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians);
     [UIApplication sharedApplication].applicationIconBadgeNumber = count;
 }
 
-+ (nullable id)valueForBool:(BOOL)boolValue yesValue:(nullable id)yesValue noValue:(nullable id)noValue {
-    if (boolValue) {
-        return yesValue;
-    }
-    
-    return noValue;
-}
-
-+ (nullable NSString *)pluralizationForCount:(NSUInteger)count singular:(nullable NSString *)singular plural:(nullable NSString *)plural {
-    if (count == 1) {
-        return singular;
-    }
-    
-    return plural;
-}
-
 + (nullable NSNumber *)angleForDeviceOrientation:(UIDeviceOrientation)orientation {
     switch (orientation) {
         case UIDeviceOrientationLandscapeRight:

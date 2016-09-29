@@ -28,8 +28,6 @@ extern NSString * _Nonnull const NOTIFICATION_OBJECT_KEY;
 + (void)incrementBadge;
 + (void)decrementBadge;
 + (void)setBadgeToCount:(NSUInteger)count;
-+ (nullable id)valueForBool:(BOOL)boolValue yesValue:(nullable id)yesValue noValue:(nullable id)noValue;
-+ (nullable NSString *)pluralizationForCount:(NSUInteger)count singular:(nullable NSString *)singular plural:(nullable NSString *)plural;
 + (nullable NSNumber *)angleForDeviceOrientation:(UIDeviceOrientation)orientation;
 + (nullable NSNumber *)angleForInterfaceOrientation:(UIInterfaceOrientation)orientation;
 + (CGFloat)angleForImageOrientation:(UIImageOrientation)orientation;
