@@ -12,7 +12,6 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <AVFoundation/AVFoundation.h>
 
 #pragma mark - // PROTOCOLS //
 
@@ -34,16 +33,8 @@ extern NSString * _Nonnull const NOTIFICATION_OBJECT_KEY;
 + (nullable NSNumber *)angleForDeviceOrientation:(UIDeviceOrientation)orientation;
 + (nullable NSNumber *)angleForInterfaceOrientation:(UIInterfaceOrientation)orientation;
 + (CGFloat)angleForImageOrientation:(UIImageOrientation)orientation;
-+ (AVCaptureVideoOrientation)convertInterfaceOrientationToVideoOrientation:(UIInterfaceOrientation)interfaceOrientation;
 + (CGFloat)statusBarHeight;
 + (nonnull NSURL *)applicationDocumentsDirectory;
-+ (BOOL)frontCameraCanTakePhoto;
-+ (BOOL)frontCameraCanTakeVideo;
-+ (BOOL)frontCameraHasFlash;
-+ (BOOL)rearCameraCanTakePhoto;
-+ (BOOL)rearCameraCanTakeVideo;
-+ (BOOL)rearCameraHasFlash;
-+ (BOOL)canAccessCameraRoll;
 + (BOOL)canAccessPhotoLibrary;
 @end
 
@@ -304,41 +295,11 @@ extern NSString * _Nonnull const UIViewControllerEditingDidChangeNotification;
 - (void)imageSourceSelectorDidSelectLibrary:(nonnull UIAlertController *)sender;
 @end
 
-#pragma mark Constants
-
-typedef enum : NSUInteger {
-    KMHMediaTypeNone = 0,
-    KMHMediaTypeImage,
-    KMHMediaTypeVideo,
-    KMHMediaTypeImageAndVideo,
-} KMHMediaType;
-
-typedef enum : NSUInteger {
-    KMHCameraTypeNone = 0,
-    KMHCameraTypeFront,
-    KMHCameraTypeRear,
-    KMHCameraTypeFrontOrRear,
-} KMHCameraType;
-
-typedef enum : NSUInteger {
-    KMHImageLibraryNone = 0,
-    KMHImageLibraryCameraRoll,
-    KMHImageLibraryPhotoLibrary,
-    KMHImageLibraryAny
-} KMHImageLibraryType;
-
-#pragma mark Interface
-
 @interface UIViewController (KMHGenerics)
 @property (nonatomic, strong, nullable) NSDictionary *info;
 @property (nonatomic) BOOL isModal;
 - (BOOL)isForceTouchEnabled;
 - (void)performBlockOnChildViewControllers:(nonnull void (^)(UIViewController * _Nonnull childViewController))block;
 - (void)presentError:(nonnull NSError *)error;
-- (void)presentImageSourceSelectorWithMediaType:(KMHMediaType)mediaType cameraType:(KMHCameraType)cameraType libraryType:(KMHImageLibraryType)libraryType delegate:(nullable id <KMHImageSourceSelectorDelegate>)delegate completion:(nullable void (^)(UIAlertController * _Nonnull alertController))completionBlock;
-- (void)presentFrontCameraWithMediaType:(KMHMediaType)mediaType delegate:(nullable id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>)delegate setup:(nullable void (^)(UIImagePickerController * _Nonnull cameraController))setupBlock completion:(nullable void (^)(UIImagePickerController * _Nonnull cameraController))completionBlock;
-- (void)presentRearCameraWithMediaType:(KMHMediaType)mediaType delegate:(nullable id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>)delegate setup:(nullable void (^)(UIImagePickerController * _Nonnull cameraController))setupBlock completion:(nullable void (^)(UIImagePickerController * _Nonnull cameraController))completionBlock;
-- (void)presentCameraRollWithMediaType:(KMHMediaType)mediaType delegate:(nullable id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>)delegate setup:(nullable void (^)(UIImagePickerController * _Nonnull imagePickerController))setupBlock completion:(nullable void (^)(UIImagePickerController * _Nonnull imagePickerController))completionBlock;
-- (void)presentPhotoLibraryWithMediaType:(KMHMediaType)mediaType delegate:(nullable id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>)delegate setup:(nullable void (^)(UIImagePickerController * _Nonnull imagePickerController))setupBlock completion:(nullable void (^)(UIImagePickerController * _Nonnull imagePickerController))completionBlock;
 - (void)popOrDismissViewControllerAnimated:(BOOL)animated;
 @end
