@@ -276,6 +276,7 @@ extern NSString * _Nonnull const UINavigationItemRightBarButtonItemsDidChangeNot
 
 @interface UIView (KMHGenerics)
 @property (nonatomic) CGFloat cornerRadius;
++ (nullable instancetype)loadViewFromNibNamed:(nonnull NSString *)name withOwner:(nullable id)owner options:(nullable NSDictionary *)options;
 - (nullable UIView *)firstResponder;
 - (BOOL)isEventualSubviewOfView:(nonnull UIView *)view;
 - (void)setFrameWithOriginX:(nullable NSNumber *)originX originY:(nullable NSNumber *)originY width:(nullable NSNumber *)width height:(nullable NSNumber *)height;
@@ -285,6 +286,7 @@ extern NSString * _Nonnull const UINavigationItemRightBarButtonItemsDidChangeNot
 - (void)rotateFromAngle:(CGFloat)fromAngle byAngle:(CGFloat)angle withDuration:(CFTimeInterval)duration completion:(nullable void (^)(void))completion;
 - (void)flipHorizontally:(CGFloat)radians withAnimations:(nullable void (^)(void))animations duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(nullable void (^)(BOOL))completion;
 - (void)flipVertically:(CGFloat)radians withAnimations:(nullable void (^)(void))animations duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(nullable void (^)(BOOL))completion;
+- (void)updateConstraintsWithDuration:(NSTimeInterval)duration block:(nullable void (^)(void))block;
 @end
 
 #pragma mark - // DEFINITIONS (UIViewController) //

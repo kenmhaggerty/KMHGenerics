@@ -1706,6 +1706,17 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
 
 #pragma mark Public Methods
 
++ (nullable instancetype)loadViewFromNibNamed:(nonnull NSString *)name withOwner:(nullable id)owner options:(nullable NSDictionary *)options {
+    NSArray <UIView *> *views = [[NSBundle mainBundle] loadNibNamed:name owner:owner options:options];
+    for (UIView *view in views) {
+        if ([view isMemberOfClass:[self class]]) {
+            return view;
+        }
+    }
+    
+    return nil;
+}
+
 - (nullable UIView *)firstResponder {
     NSMutableArray *subviews = [NSMutableArray arrayWithArray:self.subviews];
     UIView *subview;
@@ -1810,6 +1821,16 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
 - (void)flipVertically:(CGFloat)radians withAnimations:(nullable void (^)(void))animations duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(nullable void (^)(BOOL))completion {
     CGPoint rotationAxis = CGPointMake(1.0f, 0.0f);
     [self flipWithRotationAxis:rotationAxis radians:radians withAnimations:animations duration:duration options:options completion:completion];
+}
+
+- (void)updateConstraintsWithDuration:(NSTimeInterval)duration block:(nullable void (^)(void))block {
+    if (block) {
+        block();
+    }
+    [self setNeedsUpdateConstraints];
+    [UIView animateWithDuration:duration animations:^{
+        [self layoutIfNeeded];
+    }];
 }
 
 #pragma mark Private Methods
