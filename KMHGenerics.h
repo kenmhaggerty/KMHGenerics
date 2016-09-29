@@ -113,6 +113,7 @@ NS_REQUIRES_NIL_TERMINATION;
 - (void)teardown;
 - (void)setup:(nullable void(^)(void))block;
 - (void)teardown:(nullable void(^)(void))block;
+- (void)performOnceUsingToken:(nonnull id)token block:(nullable void (^)(void))block;
 @end
 
 #pragma mark - // DEFINITIONS (NSOrderedSet) //

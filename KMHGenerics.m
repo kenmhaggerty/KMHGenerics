@@ -756,6 +756,17 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return self.teardownComplete;
 }
 
+- (NSMutableSet *)tokens {
+    NSMutableSet *tokens = objc_getAssociatedObject(self, @selector(tokens));
+    if (tokens) {
+        return tokens;
+    }
+    
+    tokens = [NSMutableSet set];
+    objc_setAssociatedObject(self, @selector(tokens), tokens, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    return tokens;
+}
+
 #pragma mark Public Methods
 
 - (void)setup {
@@ -809,6 +820,15 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     else {
         method_exchangeImplementations(originalMethod, swizzledMethod);
     }
+}
+
+- (void)performOnceUsingToken:(nonnull id)token block:(nullable void (^)(void))block {
+    if ([self.tokens containsObject:token]) {
+        return;
+    }
+    
+    [self.tokens addObject:token];
+    block();
 }
 
 @end
