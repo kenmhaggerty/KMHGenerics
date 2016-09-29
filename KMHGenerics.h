@@ -113,6 +113,7 @@ NS_REQUIRES_NIL_TERMINATION;
 - (void)teardown;
 - (void)setup:(nullable void(^)(void))block;
 - (void)teardown:(nullable void(^)(void))block;
+- (void)swizzleMethod:(nonnull SEL)originalSelector withMethod:(nonnull SEL)swizzledSelector;
 - (void)performOnceUsingToken:(nonnull id)token block:(nullable void (^)(void))block;
 @end
 
