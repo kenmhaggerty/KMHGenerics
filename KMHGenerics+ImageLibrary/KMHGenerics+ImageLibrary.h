@@ -13,9 +13,34 @@
 #import "KMHGenerics.h"
 #import <AVFoundation/AVFoundation.h>
 
-#pragma mark - // PROTOCOLS //
+#pragma mark - // KMHGenerics //
 
-#pragma mark - // CONSTANTS //
+@interface KMHGenerics (ImageLibrary)
++ (AVCaptureVideoOrientation)convertInterfaceOrientationToVideoOrientation:(UIInterfaceOrientation)interfaceOrientation;
++ (BOOL)frontCameraCanTakePhoto;
++ (BOOL)frontCameraCanTakeVideo;
++ (BOOL)frontCameraHasFlash;
++ (BOOL)rearCameraCanTakePhoto;
++ (BOOL)rearCameraCanTakeVideo;
++ (BOOL)rearCameraHasFlash;
++ (BOOL)canAccessCameraRoll;
+@end
+
+#pragma mark - // UIViewController //
+
+#pragma mark Protocols
+
+@protocol KMHImageSourceSelectorDelegate <NSObject>
+@optional
+- (void)imageSourceSelectorDidSelectCamera:(nonnull UIAlertController *)sender;
+- (void)imageSourceSelectorDidSelectLibrary:(nonnull UIAlertController *)sender;
+@end
+
+#pragma mark Notifications
+
+extern NSString * _Nonnull const ImageSourceSelectorNotificationObjectKey;
+
+#pragma mark Constants
 
 typedef enum : NSUInteger {
     KMHMediaTypeNone = 0,
@@ -38,20 +63,7 @@ typedef enum : NSUInteger {
     KMHCameraTypeFrontOrRear,
 } KMHCameraType;
 
-#pragma mark - // DEFINITIONS (KMHGenerics) //
-
-@interface KMHGenerics (ImageLibrary)
-+ (AVCaptureVideoOrientation)convertInterfaceOrientationToVideoOrientation:(UIInterfaceOrientation)interfaceOrientation;
-+ (BOOL)frontCameraCanTakePhoto;
-+ (BOOL)frontCameraCanTakeVideo;
-+ (BOOL)frontCameraHasFlash;
-+ (BOOL)rearCameraCanTakePhoto;
-+ (BOOL)rearCameraCanTakeVideo;
-+ (BOOL)rearCameraHasFlash;
-+ (BOOL)canAccessCameraRoll;
-@end
-
-#pragma mark - // DEFINITIONS (UIViewController) //
+#pragma mark Methods
 
 @interface UIViewController (ImageLibrary)
 - (void)presentImageSourceSelectorWithMediaType:(KMHMediaType)mediaType cameraType:(KMHCameraType)cameraType libraryType:(KMHImageLibraryType)libraryType delegate:(nullable id <KMHImageSourceSelectorDelegate>)delegate completion:(nullable void (^)(UIAlertController * _Nonnull alertController))completionBlock;

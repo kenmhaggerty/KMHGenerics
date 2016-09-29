@@ -276,14 +276,6 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // DEFINITIONS (UIViewController) //
 
-#pragma mark Protocols
-
-@protocol KMHImageSourceSelectorDelegate <NSObject>
-@optional
-- (void)imageSourceSelectorDidSelectCamera:(nonnull UIAlertController *)sender;
-- (void)imageSourceSelectorDidSelectLibrary:(nonnull UIAlertController *)sender;
-@end
-
 @interface UIViewController (KMHGenerics)
 @property (nonatomic, strong, nullable) NSDictionary *info;
 @property (nonatomic) BOOL isModal;

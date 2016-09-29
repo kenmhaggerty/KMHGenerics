@@ -14,7 +14,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 
-#pragma mark - // IMPLEMENTATION (KMHGenerics) //
+#pragma mark - // KMHGenerics //
 
 @implementation KMHGenerics (ImageLibrary)
 
@@ -170,9 +170,13 @@
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UIViewController) //
+#pragma mark - // UIViewController //
 
-#pragma mark Definitions (Private)
+#pragma mark Notifications
+
+NSString * const ImageSourceSelectorNotificationObjectKey = @"object";
+
+#pragma mark Constants
 
 NSString * const KMHImagePickerSourceSelectorCameraPhoto = @"Take Photo";
 NSString * const KMHImagePickerSourceSelectorCameraVideo = @"Take Video";
