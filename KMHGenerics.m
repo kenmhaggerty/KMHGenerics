@@ -1145,54 +1145,12 @@ NSString * _Nonnull const UIImageViewImageDidChangeNotification = @"kUIImageView
 
 #pragma mark - // IMPLEMENTATION (UINavigationController) //
 
-#pragma mark Definitions (Private)
-
-NSString * const UINavigationControllerViewControllersDidChangeNotification = @"kUINavigationControllerViewControllersDidChangeNotification";
-
 @implementation UINavigationController (KMHGenerics)
 
 #pragma mark Public Methods
 
 - (nullable UIViewController *)rootViewController {
     return self.viewControllers.firstObject;
-}
-
-#pragma mark Private Methods
-
-+ (void)load {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [self swizzleMethod:@selector(setViewControllers:) withMethod:@selector(swizzled_setViewControllers:)];
-        [self swizzleMethod:@selector(pushViewController:animated:) withMethod:@selector(swizzled_pushViewController:animated:)];
-        [self swizzleMethod:@selector(popViewControllerAnimated:) withMethod:@selector(swizzled_popViewControllerAnimated:)];
-    });
-}
-
-- (void)swizzled_setViewControllers:(NSArray <UIViewController *> *)viewControllers {
-    NSArray *primitiveViewControllers = self.viewControllers;
-    
-    [self swizzled_setViewControllers:viewControllers];
-    
-    if ([KMHGenerics object:viewControllers isEqualToObject:primitiveViewControllers]) {
-        return;
-    }
-    
-    NSDictionary *userInfo = viewControllers ? @{NOTIFICATION_OBJECT_KEY : viewControllers} : @{};
-    [NSNotificationCenter postNotificationToMainThread:UINavigationControllerViewControllersDidChangeNotification object:self userInfo:userInfo];
-}
-
-- (void)swizzled_pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    [self swizzled_pushViewController:viewController animated:animated];
-    
-    NSDictionary *userInfo = @{NOTIFICATION_OBJECT_KEY : self.viewControllers};
-    [NSNotificationCenter postNotificationToMainThread:UINavigationControllerViewControllersDidChangeNotification object:self userInfo:userInfo];
-}
-
-- (void)swizzled_popViewControllerAnimated:(BOOL)animated {
-    [self swizzled_popViewControllerAnimated:animated];
-    
-    NSDictionary *userInfo = @{NOTIFICATION_OBJECT_KEY : self.viewControllers};
-    [NSNotificationCenter postNotificationToMainThread:UINavigationControllerViewControllersDidChangeNotification object:self userInfo:userInfo];
 }
 
 @end

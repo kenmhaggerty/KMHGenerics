@@ -193,8 +193,6 @@ extern NSString * _Nonnull const UIImageViewImageDidChangeNotification;
 
 #pragma mark - // DEFINITIONS (UINavigationController) //
 
-extern NSString * _Nonnull const UINavigationControllerViewControllersDidChangeNotification;
-
 @interface UINavigationController (KMHGenerics)
 - (nullable UIViewController *)rootViewController;
 @end
