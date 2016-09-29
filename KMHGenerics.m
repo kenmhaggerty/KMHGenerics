@@ -21,7 +21,7 @@ NSString * _Nonnull const NOTIFICATION_OBJECT_KEY = @"kNotificationUserInfo_Obje
 CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians);
 @end
 
-#pragma mark - // IMPLEMENTATION (KMHGenerics) //
+#pragma mark - // KMHGenerics //
 
 @implementation KMHGenerics
 
@@ -234,7 +234,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (NSArray) //
+#pragma mark - // NSArray //
 
 @implementation NSArray (KMHGenerics)
 
@@ -495,7 +495,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (NSData) //
+#pragma mark - // NSData //
 
 #pragma mark Imports
 
@@ -580,7 +580,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (NSDate) //
+#pragma mark - // NSDate //
 
 @implementation NSDate (KMHGenerics)
 
@@ -599,7 +599,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (NSDictionary) //
+#pragma mark - // NSDictionary //
 
 @implementation NSDictionary (KMHGenerics)
 
@@ -657,7 +657,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (NSIndexSet) //
+#pragma mark - // NSIndexSet //
 
 @implementation NSIndexSet (KMHGenerics)
 
@@ -679,7 +679,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (NSMutableDictionary) //
+#pragma mark - // NSMutableDictionary //
 
 @implementation NSMutableDictionary (KMHGenerics)
 
@@ -695,7 +695,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (NSNotificationCenter) //
+#pragma mark - // NSNotificationCenter //
 
 @implementation NSNotificationCenter (KMHGenerics)
 
@@ -722,7 +722,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (NSObject) //
+#pragma mark - // NSObject //
 
 @implementation NSObject (KMHGenerics)
 
@@ -799,8 +799,6 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     self.teardownComplete = YES;
 }
 
-#pragma mark Private Methods
-
 // copied w/ modifications via Mattt Thompson's tutorial at http://nshipster.com/method-swizzling/
 - (void)swizzleMethod:(nonnull SEL)originalSelector withMethod:(nonnull SEL)swizzledSelector {
     Class class = [self class];
@@ -833,7 +831,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (NSOrderedSet) //
+#pragma mark - // NSOrderedSet //
 
 @implementation NSOrderedSet (KMHGenerics)
 
@@ -853,7 +851,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (NSSet) //
+#pragma mark - // NSSet //
 
 @implementation NSSet (KMHGenerics)
 
@@ -907,7 +905,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (NSString) //
+#pragma mark - // NSString //
 
 @implementation NSString (KMHGenerics)
 
@@ -955,7 +953,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UIAlertController) //
+#pragma mark - // UIAlertController //
 
 @implementation UIAlertController (KMHGenerics)
 
@@ -995,7 +993,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UIButton) //
+#pragma mark - // UIButton //
 
 @implementation UIButton (KMHGenerics)
 
@@ -1027,7 +1025,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UICollectionViewCell) //
+#pragma mark - // UICollectionViewCell //
 
 @implementation UICollectionViewCell (KMHGenerics)
 
@@ -1039,7 +1037,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UIColor) //
+#pragma mark - // UIColor //
 
 @implementation UIColor (KMHGenerics)
 
@@ -1051,7 +1049,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UIImage) //
+#pragma mark - // UIImage //
 
 @implementation UIImage (KMHGenerics)
 
@@ -1101,7 +1099,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UINavigationBar) //
+#pragma mark - // UINavigationBar //
 
 @implementation UINavigationBar (KMHGenerics)
 
@@ -1113,7 +1111,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UINavigationController) //
+#pragma mark - // UINavigationController //
 
 @implementation UINavigationController (KMHGenerics)
 
@@ -1125,7 +1123,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UIScrollView) //
+#pragma mark - // UIScrollView //
 
 @implementation UIScrollView (KMHGenerics)
 
@@ -1142,7 +1140,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UISegmentedControl) //
+#pragma mark - // UISegmentedControl //
 
 @implementation UISegmentedControl (KMHGenerics)
 
@@ -1154,7 +1152,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UIStoryboard) //
+#pragma mark - // UIStoryboard //
 
 @implementation UIStoryboard (KMHGenerics)
 
@@ -1166,7 +1164,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UIStoryboardSegue) //
+#pragma mark - // UIStoryboardSegue //
 
 @implementation UIStoryboardSegue (KMHGenerics)
 
@@ -1188,7 +1186,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UITableView) //
+#pragma mark - // UITableView //
 
 @implementation UITableView (KMHGenerics)
 
@@ -1391,7 +1389,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UITableViewCell) //
+#pragma mark - // UITableViewCell //
 
 @implementation UITableViewCell (KMHGenerics)
 
@@ -1425,7 +1423,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UITextField) //
+#pragma mark - // UITextField //
 
 @implementation UITextField (KMHGenerics)
 
@@ -1465,7 +1463,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UITextView) //
+#pragma mark - // UITextView //
 
 #pragma mark Definitions
 
@@ -1536,7 +1534,7 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UIView) //
+#pragma mark - // UIView //
 
 @implementation UIView (KMHGenerics)
 
@@ -1695,7 +1693,7 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
 
 @end
 
-#pragma mark - // IMPLEMENTATION (UIViewController) //
+#pragma mark - // UIViewController //
 
 @implementation UIViewController (KMHGenerics)
 
