@@ -859,10 +859,18 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return [[self class] setWithSet:mutableSet];
 }
 
-- (nonnull instancetype)setByApplyingBlock:(nonnull _Nonnull id (^)(_Nonnull id))block {
+- (nonnull instancetype)setByApplyingBlock:(nullable _Nullable id (^)(_Nonnull id))block {
+    if (!block) {
+        return [NSSet setWithSet:self];
+    }
+    
     NSMutableSet *set = [NSMutableSet set];
+    id objectToAdd;
     for (id object in self) {
-        [set addObject:block(object)];
+        objectToAdd = block(object);
+        if (objectToAdd) {
+            [set addObject:objectToAdd];
+        }
     }
     return [NSSet setWithSet:set];
 }
