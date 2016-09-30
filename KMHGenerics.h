@@ -39,6 +39,8 @@ extern NSString * _Nonnull const NOTIFICATION_OBJECT_KEY;
 + (void)setStatusBarHidden:(BOOL)hidden withAnimation:(UIStatusBarAnimation)animation;
 + (BOOL)isStatusBarHidden;
 + (nonnull NSURL *)applicationDocumentsDirectory;
++ (nullable NSString *)appName;
++ (float)iOSVersion;
 + (CGSize)scaleSize:(CGSize)size toFitInsideSize:(CGSize)aSize;
 + (CGSize)scaleSize:(CGSize)size toFitOutsideSize:(CGSize)aSize;
 @end

@@ -214,6 +214,14 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians);
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
++ (nullable NSString *)appName {
+    return [[[NSBundle mainBundle] infoDictionary] objectForKey:(id)kCFBundleNameKey];
+}
+
++ (float)iOSVersion {
+    return [UIDevice currentDevice].systemVersion.floatValue;
+}
+
 + (CGSize)scaleSize:(CGSize)size toFitInsideSize:(CGSize)aSize {
     CGFloat scale = fminf(aSize.width/size.width, aSize.height/size.height);
     return CGSizeMake(size.width*scale, size.height*scale);
