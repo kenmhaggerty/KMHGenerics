@@ -1702,6 +1702,10 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
     }];
 }
 
+- (BOOL)isUsingAutoLayout {
+    return (self.constraints.count > 0);
+}
+
 #pragma mark Private Methods
 
 - (void)flipWithRotationAxis:(CGPoint)rotationAxis radians:(CGFloat)radians withAnimations:(nullable void (^)(void))animations duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(nullable void (^)(BOOL))completion {

@@ -285,6 +285,7 @@ NS_REQUIRES_NIL_TERMINATION;
 - (void)flipHorizontally:(CGFloat)radians withAnimations:(nullable void (^)(void))animations duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(nullable void (^)(BOOL))completion;
 - (void)flipVertically:(CGFloat)radians withAnimations:(nullable void (^)(void))animations duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(nullable void (^)(BOOL))completion;
 - (void)updateConstraintsWithDuration:(NSTimeInterval)duration block:(nullable void (^)(void))block;
+- (BOOL)isUsingAutoLayout;
 @end
 
 #pragma mark - // UIViewController //
