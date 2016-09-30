@@ -10,7 +10,6 @@
 
 #pragma mark - // IMPORTS (Public) //
 
-#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 #pragma mark - // KMHGenerics //

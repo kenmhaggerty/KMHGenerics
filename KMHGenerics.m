@@ -1173,8 +1173,6 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @implementation UIColor (KMHGenerics)
 
-#pragma mark Public Methods
-
 + (nonnull instancetype)iOSBlue {
     return [[self class] colorWithHue:0.58692810457516342 saturation:1.0 brightness:1.0f alpha:1.0f];
 }
