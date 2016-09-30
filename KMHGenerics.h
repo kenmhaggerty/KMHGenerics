@@ -194,8 +194,10 @@ NS_REQUIRES_NIL_TERMINATION;
 
 @interface UIImage (KMHGenerics)
 - (nonnull instancetype)imageWithAlpha:(CGFloat)alpha;
+- (nonnull instancetype)imageWithSize:(CGSize)size contentMode:(UIViewContentMode)contentMode retina:(BOOL)retina;
 - (nonnull instancetype)thumbnailWithSize:(CGSize)size opaque:(BOOL)opaque;
 - (nonnull instancetype)croppedImageWithFrame:(CGRect)frame;
+- (nonnull instancetype)croppedImageWithSize:(CGSize)size contentMode:(UIViewContentMode)contentMode;
 @end
 
 #pragma mark - // UINavigationBar //

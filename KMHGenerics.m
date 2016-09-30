@@ -270,6 +270,100 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return rotatedCGImage;
 }
 
++ (BOOL)contentModeRequiresCropping:(UIViewContentMode)contentMode {
+    switch (contentMode) {
+        case UIViewContentModeCenter:
+        case UIViewContentModeTop:
+        case UIViewContentModeBottom:
+        case UIViewContentModeLeft:
+        case UIViewContentModeRight:
+        case UIViewContentModeTopLeft:
+        case UIViewContentModeTopRight:
+        case UIViewContentModeBottomLeft:
+        case UIViewContentModeBottomRight:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
++ (BOOL)contentModeRequiresResizing:(UIViewContentMode)contentMode {
+    switch (contentMode) {
+        case UIViewContentModeScaleToFill:
+        case UIViewContentModeScaleAspectFit:
+        case UIViewContentModeScaleAspectFill:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
++ (BOOL)contentModeAlignsLeft:(UIViewContentMode)contentMode {
+    switch (contentMode) {
+        case UIViewContentModeTopLeft:
+        case UIViewContentModeLeft:
+        case UIViewContentModeBottomLeft:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
++ (BOOL)contentModeAlignsCenterX:(UIViewContentMode)contentMode {
+    switch (contentMode) {
+        case UIViewContentModeTop:
+        case UIViewContentModeCenter:
+        case UIViewContentModeBottom:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
++ (BOOL)contentModeAlignsRight:(UIViewContentMode)contentMode {
+    switch (contentMode) {
+        case UIViewContentModeTopRight:
+        case UIViewContentModeRight:
+        case UIViewContentModeBottomRight:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
++ (BOOL)contentModeAlignsTop:(UIViewContentMode)contentMode {
+    switch (contentMode) {
+        case UIViewContentModeTopLeft:
+        case UIViewContentModeTop:
+        case UIViewContentModeTopRight:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
++ (BOOL)contentModeAlignsCenterY:(UIViewContentMode)contentMode {
+    switch (contentMode) {
+        case UIViewContentModeLeft:
+        case UIViewContentModeCenter:
+        case UIViewContentModeRight:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
++ (BOOL)contentModeAlignsBottom:(UIViewContentMode)contentMode {
+    switch (contentMode) {
+        case UIViewContentModeBottomLeft:
+        case UIViewContentModeBottom:
+        case UIViewContentModeBottomRight:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
 @end
 
 #pragma mark - // NSArray //
@@ -1123,6 +1217,35 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return image;
 }
 
+// copied w/ edits from Stack Overflow answer at:
+// http://stackoverflow.com/questions/2658738/the-simplest-way-to-resize-an-uiimage
+- (nonnull instancetype)imageWithSize:(CGSize)size contentMode:(UIViewContentMode)contentMode retina:(BOOL)retina {
+    if ([KMHGenerics contentModeRequiresCropping:contentMode]) {
+        return [self croppedImageWithSize:size contentMode:contentMode];
+    }
+    
+    if ([KMHGenerics contentModeRequiresResizing:contentMode]) {
+        CGSize newSize = size;
+        if (contentMode == UIViewContentModeScaleAspectFit) {
+            newSize = [KMHGenerics scaleSize:self.size toFitInsideSize:size];
+        }
+        else if (contentMode == UIViewContentModeScaleAspectFill) {
+            newSize = [KMHGenerics scaleSize:self.size toFitOutsideSize:size];
+        }
+        CGFloat scale = retina ? 0.0 : 1.0;
+        UIGraphicsBeginImageContextWithOptions(newSize, NO, scale);
+        [self drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+        UIImage *resizedImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        if (contentMode == UIViewContentModeScaleAspectFill) {
+            resizedImage = [resizedImage croppedImageWithSize:size contentMode:UIViewContentModeCenter];
+        }
+        return resizedImage;
+    }
+    
+    return nil;
+}
+
 - (nonnull instancetype)thumbnailWithSize:(CGSize)size opaque:(BOOL)opaque {
     CGRect cropRect;
     CGFloat newDimension;
@@ -1148,6 +1271,24 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     imageRef = CGImageCreateWithImageInRect(imageRef, CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height-frame.origin.y));
     id croppedImage = [[self class] imageWithCGImage:imageRef];
     CGImageRelease(imageRef);
+    return croppedImage;
+}
+
+- (nonnull instancetype)croppedImageWithSize:(CGSize)size contentMode:(UIViewContentMode)contentMode {
+    CGRect frame = CGRectMake(0.0f, 0.0f, size.width, size.height);
+    if ([KMHGenerics contentModeAlignsCenterX:contentMode]) {
+        frame.origin.x = (self.size.width-size.width)/2.0f;
+    }
+    else if ([KMHGenerics contentModeAlignsRight:contentMode]) {
+        frame.origin.x = self.size.width-size.width;
+    }
+    if ([KMHGenerics contentModeAlignsCenterY:contentMode]) {
+        frame.origin.y = (self.size.height-size.height)/2.0f;
+    }
+    else if ([KMHGenerics contentModeAlignsBottom:contentMode]) {
+        frame.origin.y = self.size.height-size.height;
+    }
+    UIImage *croppedImage = [self croppedImageWithFrame:frame];
     return croppedImage;
 }
 
