@@ -32,13 +32,13 @@
 
 @protocol KMHImageSourceSelectorDelegate <NSObject>
 @optional
-- (void)imageSourceSelectorDidSelectCamera:(nonnull UIAlertController *)sender;
-- (void)imageSourceSelectorDidSelectLibrary:(nonnull UIAlertController *)sender;
+- (void)imageSourceSelectorDidSelectCamera:(UIAlertController *)sender;
+- (void)imageSourceSelectorDidSelectLibrary:(UIAlertController *)sender;
 @end
 
 #pragma mark Notifications
 
-extern NSString * _Nonnull const ImageSourceSelectorNotificationObjectKey;
+extern NSString * const ImageSourceSelectorNotificationObjectKey;
 
 #pragma mark Constants
 
@@ -66,9 +66,9 @@ typedef enum : NSUInteger {
 #pragma mark Methods
 
 @interface UIViewController (ImageLibrary)
-- (void)presentImageSourceSelectorWithMediaType:(KMHMediaType)mediaType cameraType:(KMHCameraType)cameraType libraryType:(KMHImageLibraryType)libraryType delegate:(nullable id <KMHImageSourceSelectorDelegate>)delegate completion:(nullable void (^)(UIAlertController * _Nonnull alertController))completionBlock;
-- (void)presentFrontCameraWithMediaType:(KMHMediaType)mediaType delegate:(nullable id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>)delegate setup:(nullable void (^)(UIImagePickerController * _Nonnull cameraController))setupBlock completion:(nullable void (^)(UIImagePickerController * _Nonnull cameraController))completionBlock;
-- (void)presentRearCameraWithMediaType:(KMHMediaType)mediaType delegate:(nullable id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>)delegate setup:(nullable void (^)(UIImagePickerController * _Nonnull cameraController))setupBlock completion:(nullable void (^)(UIImagePickerController * _Nonnull cameraController))completionBlock;
-- (void)presentCameraRollWithMediaType:(KMHMediaType)mediaType delegate:(nullable id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>)delegate setup:(nullable void (^)(UIImagePickerController * _Nonnull imagePickerController))setupBlock completion:(nullable void (^)(UIImagePickerController * _Nonnull imagePickerController))completionBlock;
-- (void)presentPhotoLibraryWithMediaType:(KMHMediaType)mediaType delegate:(nullable id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>)delegate setup:(nullable void (^)(UIImagePickerController * _Nonnull imagePickerController))setupBlock completion:(nullable void (^)(UIImagePickerController * _Nonnull imagePickerController))completionBlock;
+- (void)presentImageSourceSelectorWithMediaType:(KMHMediaType)mediaType cameraType:(KMHCameraType)cameraType libraryType:(KMHImageLibraryType)libraryType delegate:(id <KMHImageSourceSelectorDelegate>)delegate completion:(void (^)(UIAlertController * alertController))completionBlock;
+- (void)presentFrontCameraWithMediaType:(KMHMediaType)mediaType delegate:(id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>)delegate setup:(void (^)(UIImagePickerController * cameraController))setupBlock completion:(void (^)(UIImagePickerController * cameraController))completionBlock;
+- (void)presentRearCameraWithMediaType:(KMHMediaType)mediaType delegate:(id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>)delegate setup:(void (^)(UIImagePickerController * cameraController))setupBlock completion:(void (^)(UIImagePickerController * cameraController))completionBlock;
+- (void)presentCameraRollWithMediaType:(KMHMediaType)mediaType delegate:(id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>)delegate setup:(void (^)(UIImagePickerController * imagePickerController))setupBlock completion:(void (^)(UIImagePickerController * imagePickerController))completionBlock;
+- (void)presentPhotoLibraryWithMediaType:(KMHMediaType)mediaType delegate:(id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>)delegate setup:(void (^)(UIImagePickerController * imagePickerController))setupBlock completion:(void (^)(UIImagePickerController * imagePickerController))completionBlock;
 @end
