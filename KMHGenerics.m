@@ -1120,6 +1120,18 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
+#pragma mark - // UIScreen //
+
+@implementation UIScreen (KMHGenerics)
+
+#pragma mark Public Methods
+
+- (BOOL)isRetina {
+    return (self.scale > 1.0f);
+}
+
+@end
+
 #pragma mark - // UIScrollView //
 
 @implementation UIScrollView (KMHGenerics)

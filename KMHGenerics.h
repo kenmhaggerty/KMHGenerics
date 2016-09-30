@@ -193,6 +193,12 @@ NS_REQUIRES_NIL_TERMINATION;
 - (nullable UIViewController *)rootViewController;
 @end
 
+#pragma mark - // UIScreen //
+
+@interface UIScreen (KMHGenerics)
+- (BOOL)isRetina;
+@end
+
 #pragma mark - // UIScrollView //
 
 @interface UIScrollView (KMHGenerics)
