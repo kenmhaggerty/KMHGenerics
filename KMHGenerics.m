@@ -186,6 +186,30 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians);
     return [UIApplication sharedApplication].statusBarFrame.size.height;
 }
 
++ (void)setStatusBarStyle:(UIStatusBarStyle)style {
+    [UIApplication sharedApplication].statusBarStyle = style;
+}
+
++ (void)setStatusBarStyle:(UIStatusBarStyle)style animated:(BOOL)animated {
+    [[UIApplication sharedApplication] setStatusBarStyle:style animated:animated];
+}
+
++ (UIStatusBarStyle)statusBarStyle {
+    return [UIApplication sharedApplication].statusBarStyle;
+}
+
++ (void)setStatusBarHidden:(BOOL)statusBarHidden {
+    [UIApplication sharedApplication].statusBarHidden = statusBarHidden;
+}
+
++ (void)setStatusBarHidden:(BOOL)hidden withAnimation:(UIStatusBarAnimation)animation {
+    [[UIApplication sharedApplication] setStatusBarHidden:hidden withAnimation:animation];
+}
+
++ (BOOL)isStatusBarHidden {
+    return [UIApplication sharedApplication].isStatusBarHidden;
+}
+
 + (nonnull NSURL *)applicationDocumentsDirectory {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
