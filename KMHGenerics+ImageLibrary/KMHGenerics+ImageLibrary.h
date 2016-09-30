@@ -15,6 +15,12 @@
 
 #pragma mark - // KMHGenerics //
 
+#pragma mark Notifications
+
+extern NSString * const CameraRollMostRecentImageDidChangeNotification;
+
+#pragma mark Methods
+
 @interface KMHGenerics (ImageLibrary)
 + (AVCaptureVideoOrientation)convertInterfaceOrientationToVideoOrientation:(UIInterfaceOrientation)interfaceOrientation;
 + (BOOL)frontCameraCanTakePhoto;
@@ -25,6 +31,7 @@
 + (BOOL)rearCameraHasFlash;
 + (BOOL)canAccessCameraRoll;
 + (BOOL)canAccessPhotoLibrary;
++ (void)getCameraRollThumbnailWithSize:(CGSize)size completion:(void (^)(UIImage *thumbnail, NSError *error))completionBlock;
 @end
 
 #pragma mark - // UIViewController //

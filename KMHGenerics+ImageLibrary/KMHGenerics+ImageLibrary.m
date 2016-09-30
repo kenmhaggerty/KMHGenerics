@@ -13,12 +13,50 @@
 #import "KMHGenerics+ImageLibrary.h"
 #import <QuartzCore/QuartzCore.h>
 #import <MobileCoreServices/MobileCoreServices.h>
+#import <AssetsLibrary/AssetsLibrary.h>
+#import <Photos/Photos.h>
+#import <objc/runtime.h>
 
 #pragma mark - // KMHGenerics //
 
 @implementation KMHGenerics (ImageLibrary)
 
-#pragma mark Public Methods
+#pragma mark // NOTIFICATIONS //
+
+NSString * const CameraRollMostRecentImageDidChangeNotification = @"kCameraRollMostRecentImageDidChangeNotification";
+
+#pragma mark // SETTERS AND GETTERS (Private) //
+
+- (void)setAssetsLibrary:(ALAssetsLibrary *)assetsLibrary {
+    objc_setAssociatedObject(self, @selector(assetsLibrary), assetsLibrary, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (ALAssetsLibrary *)assetsLibrary {
+    ALAssetsLibrary *assetsLibrary = objc_getAssociatedObject(self, @selector(assetsLibrary));
+    if (assetsLibrary) {
+        return assetsLibrary;
+    }
+    
+    self.assetsLibrary = [ALAssetsLibrary new];
+    return self.assetsLibrary;
+}
+
+- (void)setCameraRollMostRecentImage:(UIImage *)cameraRollMostRecentImage {
+    if ([KMHGenerics object:cameraRollMostRecentImage isEqualToObject:self.cameraRollMostRecentImage]) {
+        return;
+    }
+    
+    objc_setAssociatedObject(self, @selector(cameraRollMostRecentImage), cameraRollMostRecentImage, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    NSDictionary *userInfo = cameraRollMostRecentImage ? @{NOTIFICATION_OBJECT_KEY : cameraRollMostRecentImage} : @{};
+    [NSNotificationCenter postNotificationToMainThread:CameraRollMostRecentImageDidChangeNotification object:nil userInfo:userInfo];
+}
+
+- (UIImage *)cameraRollMostRecentImage {
+    return objc_getAssociatedObject(self, @selector(cameraRollMostRecentImage));;
+}
+
+#pragma mark // PUBLIC METHODS //
 
 + (AVCaptureVideoOrientation)convertInterfaceOrientationToVideoOrientation:(UIInterfaceOrientation)interfaceOrientation {
     switch (interfaceOrientation) {
@@ -67,7 +105,59 @@
     return [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
 }
 
++ (void)getCameraRollThumbnailWithSize:(CGSize)size completion:(void (^)(UIImage *thumbnail, NSError *error))completionBlock {
+    UIImage *image = [KMHGenerics sharedGenerics].cameraRollMostRecentImage;
+    if (image) {
+        if (completionBlock) {
+            UIImage *thumbnail = [image imageWithSize:size contentMode:UIViewContentModeScaleAspectFill retina:YES];
+            completionBlock(thumbnail, nil);
+        }
+        return;
+    }
+    
+    void (^setAndRecurseBlock)(UIImage *, NSError *) = ^(UIImage *image, NSError *error) {
+        [KMHGenerics sharedGenerics].cameraRollMostRecentImage = image;
+        [KMHGenerics getCameraRollThumbnailWithSize:size completion:completionBlock];
+    };
+    
+    if ([KMHGenerics iOSVersion] < 9.0f) {
+        [KMHGenerics getLastImageFromCameraRollUsingAssetsLibraryWithCompletion:setAndRecurseBlock];
+        return;
+    }
+    
+    [KMHGenerics getLastImageFromCameraRollUsingPhotosWithCompletion:setAndRecurseBlock];
+}
+
 #pragma mark // PRIVATE METHODS (General) //
+
++ (instancetype)sharedGenerics {
+    static KMHGenerics *_sharedGenerics = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedGenerics = [[KMHGenerics alloc] init];
+        [_sharedGenerics addObserversToAssetsLibrary];
+    });
+    return _sharedGenerics;
+}
+
+#pragma mark // PRIVATE METHODS (Observers) //
+
+- (void)addObserversToAssetsLibrary {
+    [NSNotificationCenter addObserver:self selector:@selector(assetsLibraryDidChange:) name:ALAssetsLibraryChangedNotification object:nil];
+}
+
+//- (void)removeObserversFromAssetsLibrary {
+//    [NSNotificationCenter removeObserver:self name:ALAssetsLibraryChangedNotification object:nil];
+//}
+
+#pragma mark // PRIVATE METHODS (Responders) //
+
+- (void)assetsLibraryDidChange:(NSNotification *)notification {
+    [KMHGenerics sharedGenerics].cameraRollMostRecentImage = nil;
+    [KMHGenerics getCameraRollThumbnailWithSize:CGSizeZero completion:nil];
+}
+
+#pragma mark // PRIVATE METHODS (Other) //
 
 + (NSArray <NSString *> *)arrayForMediaType:(KMHMediaType)mediaType {
     switch (mediaType) {
@@ -170,6 +260,41 @@
     }
     
     return KMHImageLibraryPhotoLibrary;
+}
+
++ (ALAssetsLibrary *)assetsLibrary {
+    return [KMHGenerics sharedGenerics].assetsLibrary;
+}
+
++ (void)getLastImageFromCameraRollUsingAssetsLibraryWithCompletion:(void (^)(UIImage *image, NSError *error))completionBlock {
+    [[KMHGenerics assetsLibrary] enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+        if (!group || group.numberOfAssets) {
+            return;
+        }
+        
+        [group enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndex:group.numberOfAssets-1] options:0 usingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
+            *stop = YES;
+            UIImage *image = [UIImage imageWithCGImage:result.defaultRepresentation.fullResolutionImage];
+            completionBlock(image, nil);
+        }];
+    } failureBlock:^(NSError *error) {
+        if (completionBlock) {
+            completionBlock(nil, error);
+        }
+    }];
+}
+
++ (void)getLastImageFromCameraRollUsingPhotosWithCompletion:(void (^)(UIImage *image, NSError *error))completionBlock {
+    PHFetchOptions *fetchOptions = [[PHFetchOptions alloc] init];
+    fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
+    PHFetchResult *fetchResult = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:fetchOptions];
+    PHAsset *lastAsset = fetchResult.lastObject;
+    PHImageRequestOptions *options = PHImageRequestOptionsVersionCurrent;
+    options.synchronous = YES;
+    [[PHImageManager defaultManager] requestImageForAsset:lastAsset targetSize:CGSizeMake(lastAsset.pixelWidth, lastAsset.pixelHeight) contentMode:PHImageContentModeAspectFill options:options resultHandler:^(UIImage *image, NSDictionary *info) {
+        NSError *error = info[PHImageErrorKey];
+        completionBlock(image, error);
+    }];
 }
 
 @end
