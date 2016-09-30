@@ -173,6 +173,13 @@ NS_REQUIRES_NIL_TERMINATION;
 + (nonnull instancetype)iOSBlue;
 @end
 
+#pragma mark - // UIDevice //
+
+@interface UIDevice (KMHGenerics)
+- (BOOL)isPortrait;
+- (BOOL)isLandscape;
+@end
+
 #pragma mark - // UIImage //
 
 @interface UIImage (KMHGenerics)

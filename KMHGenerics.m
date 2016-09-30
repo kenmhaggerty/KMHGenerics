@@ -1046,6 +1046,22 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
+#pragma mark - // UIDevice //
+
+@implementation UIDevice (KMHGenerics)
+
+#pragma mark Public Methods
+
+- (BOOL)isPortrait {
+    return UIDeviceOrientationIsPortrait(self.orientation);
+}
+
+- (BOOL)isLandscape {
+    return UIDeviceOrientationIsLandscape(self.orientation);
+}
+
+@end
+
 #pragma mark - // UIImage //
 
 @implementation UIImage (KMHGenerics)
