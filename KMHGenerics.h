@@ -33,6 +33,8 @@ extern NSString * _Nonnull const NOTIFICATION_OBJECT_KEY;
 + (CGFloat)angleForImageOrientation:(UIImageOrientation)orientation;
 + (CGFloat)statusBarHeight;
 + (nonnull NSURL *)applicationDocumentsDirectory;
++ (CGSize)scaleSize:(CGSize)size toFitInsideSize:(CGSize)aSize;
++ (CGSize)scaleSize:(CGSize)size toFitOutsideSize:(CGSize)aSize;
 @end
 
 #pragma mark - // NSArray //

@@ -190,6 +190,15 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians);
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
++ (CGSize)scaleSize:(CGSize)size toFitInsideSize:(CGSize)aSize {
+    CGFloat scale = fminf(aSize.width/size.width, aSize.height/size.height);
+    return CGSizeMake(size.width*scale, size.height*scale);
+}
+
++ (CGSize)scaleSize:(CGSize)size toFitOutsideSize:(CGSize)aSize {
+    CGFloat scale = fmaxf(aSize.width/size.width, aSize.height/size.height);
+    return CGSizeMake(size.width*scale, size.height*scale);
+}
 
 #pragma mark Private Methods
 
