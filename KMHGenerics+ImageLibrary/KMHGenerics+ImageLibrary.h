@@ -24,6 +24,7 @@
 + (BOOL)rearCameraCanTakeVideo;
 + (BOOL)rearCameraHasFlash;
 + (BOOL)canAccessCameraRoll;
++ (BOOL)canAccessPhotoLibrary;
 @end
 
 #pragma mark - // UIViewController //

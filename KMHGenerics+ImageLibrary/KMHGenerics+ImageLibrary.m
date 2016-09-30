@@ -63,7 +63,11 @@
     return [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
 }
 
-#pragma mark Private Methods
++ (BOOL)canAccessPhotoLibrary {
+    return [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
+}
+
+#pragma mark // PRIVATE METHODS (General) //
 
 + (NSArray <NSString *> *)arrayForMediaType:(KMHMediaType)mediaType {
     switch (mediaType) {

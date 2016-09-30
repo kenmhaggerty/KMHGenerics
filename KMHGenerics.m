@@ -190,9 +190,6 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians);
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
-+ (BOOL)canAccessPhotoLibrary {
-    return [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
-}
 
 #pragma mark Private Methods
 

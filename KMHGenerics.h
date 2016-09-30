@@ -33,7 +33,6 @@ extern NSString * _Nonnull const NOTIFICATION_OBJECT_KEY;
 + (CGFloat)angleForImageOrientation:(UIImageOrientation)orientation;
 + (CGFloat)statusBarHeight;
 + (nonnull NSURL *)applicationDocumentsDirectory;
-+ (BOOL)canAccessPhotoLibrary;
 @end
 
 #pragma mark - // NSArray //
