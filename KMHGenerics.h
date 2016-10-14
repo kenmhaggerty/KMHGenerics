@@ -100,6 +100,12 @@ NS_REQUIRES_NIL_TERMINATION;
 - (nonnull NSArray *)array;
 @end
 
+#pragma mark - // NSMutableArray //
+
+@interface NSMutableArray (KMHGenerics)
+- (void)removeFirstObject;
+@end
+
 #pragma mark - // NSMutableDictionary //
 
 @interface NSMutableDictionary (KMHGenerics)

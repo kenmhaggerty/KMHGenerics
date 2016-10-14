@@ -811,6 +811,18 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
+#pragma mark - // NSMutableArray //
+
+@implementation NSMutableArray (KMHGenerics)
+
+#pragma mark Public Methods
+
+- (void)removeFirstObject {
+    [self removeObjectAtIndex:0];
+}
+
+@end
+
 #pragma mark - // NSMutableDictionary //
 
 @implementation NSMutableDictionary (KMHGenerics)
