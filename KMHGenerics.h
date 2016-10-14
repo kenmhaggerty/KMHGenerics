@@ -12,13 +12,17 @@
 
 #import <UIKit/UIKit.h>
 
+#pragma mark - // DEFINITIONS (Public) //
+
+#define stringFromVariable(variable) (@""#variable)
+
 #pragma mark - // KMHGenerics //
 
-#pragma mark Constants
+#pragma mark Notifications
 
 extern NSString * _Nonnull const NOTIFICATION_OBJECT_KEY;
 
-#define stringFromVariable(variable) (@""#variable)
+#pragma mark Public Interface
 
 @interface KMHGenerics : NSObject
 + (BOOL)object:(nullable id)object1 isEqualToObject:(nullable id)object2;
@@ -45,6 +49,8 @@ extern NSString * _Nonnull const NOTIFICATION_OBJECT_KEY;
 @end
 
 #pragma mark - // NSArray //
+
+#pragma mark Public Interface
 
 @interface NSArray (KMHGenerics)
 + (nonnull instancetype)arrayWithNullableObject:(nullable id)anObject;
@@ -73,6 +79,8 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // NSData //
 
+#pragma mark Public Interface
+
 @interface NSData (KMHGenerics)
 - (nonnull NSData *)AES256EncryptWithKey:(nonnull NSString *)key;
 - (nonnull NSData *)AES256DecryptWithKey:(nonnull NSString *)key;
@@ -81,11 +89,15 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // NSDate //
 
+#pragma mark Public Interface
+
 @interface NSDate (KMHGenerics)
 - (nonnull instancetype)dateRoundedToPrecision:(NSUInteger)decimalPoints;
 @end
 
 #pragma mark - // NSDictionary //
+
+#pragma mark Public Interface
 
 @interface NSDictionary (KMHGenerics)
 + (nonnull instancetype)dictionaryWithNullableObject:(nullable id)object forKey:(nonnull id <NSCopying>)key;
@@ -95,6 +107,8 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // NSIndexSet //
 
+#pragma mark Public Interface
+
 @interface NSIndexSet (KMHGenerics)
 + (nonnull instancetype)indexSetWithArray:(nonnull NSArray <NSNumber *> *)array;
 - (nonnull NSArray *)array;
@@ -102,17 +116,23 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // NSMutableArray //
 
+#pragma mark Public Interface
+
 @interface NSMutableArray (KMHGenerics)
 - (void)removeFirstObject;
 @end
 
 #pragma mark - // NSMutableDictionary //
 
+#pragma mark Public Interface
+
 @interface NSMutableDictionary (KMHGenerics)
 - (void)setNullableObject:(nullable id)anObject forKey:(nonnull id <NSCopying>)aKey;
 @end
 
 #pragma mark - // NSNotificationCenter //
+
+#pragma mark Public Interface
 
 @interface NSNotificationCenter (KMHGenerics)
 + (void)addObserver:(nonnull id)notificationObserver selector:(nonnull SEL)notificationSelector name:(nullable NSString *)notificationName object:(nullable id)notificationSender;
@@ -121,6 +141,8 @@ NS_REQUIRES_NIL_TERMINATION;
 @end
 
 #pragma mark - // NSObject //
+
+#pragma mark Public Interface
 
 @interface NSObject (KMHGenerics)
 - (void)setup;
@@ -133,12 +155,16 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // NSOrderedSet //
 
+#pragma mark Public Interface
+
 @interface NSOrderedSet (KMHGenerics)
 - (nonnull instancetype)orderedSetByRemovingObject:(nonnull id)anObject;
 - (nonnull instancetype)orderedSetBySubtractingSet:(nonnull NSSet *)set;
 @end
 
 #pragma mark - // NSSet //
+
+#pragma mark Public Interface
 
 @interface NSSet (KMHGenerics)
 - (nonnull instancetype)setByRemovingObject:(nonnull id)anObject;
@@ -149,6 +175,8 @@ NS_REQUIRES_NIL_TERMINATION;
 @end
 
 #pragma mark - // NSString //
+
+#pragma mark Public Interface
 
 @interface NSString (KMHGenerics)
 + (nonnull instancetype)randomStringWithCharacters:(nonnull NSString *)charactersString length:(NSUInteger)length;
@@ -162,11 +190,15 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // NSUUID //
 
+#pragma mark Public Interface
+
 @interface NSUUID (KMHGenerics)
 + (nonnull NSUUID *)uuidWithValidator:(nullable BOOL(^)(NSUUID * _Nonnull uuid))validationBlock;
 @end
 
 #pragma mark - // UIAlertController //
+
+#pragma mark Public Interface
 
 @interface UIAlertController (KMHGenerics)
 + (nonnull instancetype)alertControllerWithTitle:(nullable NSString *)title message:(nullable NSString *)message preferredStyle:(UIAlertControllerStyle)preferredStyle actions:(nullable NSArray <NSString *> *)actions preferredAction:(nullable NSString *)preferredAction dismissalText:(nullable NSString *)dismissalText completion:(nullable void(^)(UIAlertAction * _Nonnull action, NSArray <UITextField *> * _Nonnull textFields))completionBlock;
@@ -175,11 +207,15 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // UICollectionViewCell //
 
+#pragma mark Public Interface
+
 @interface UICollectionViewCell (KMHGenerics)
 + (nonnull instancetype)cellWithReuseIdentifier:(nullable NSString *)reuseIdentifier collectionView:(nonnull UICollectionView *)collectionView atIndexPath:(nonnull NSIndexPath *)indexPath;
 @end
 
 #pragma mark - // UIButton //
+
+#pragma mark Public Interface
 
 @interface UIButton (KMHGenerics)
 - (void)setText:(nullable NSString *)text;
@@ -190,11 +226,15 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // UIColor //
 
+#pragma mark Public Interface
+
 @interface UIColor (KMHGenerics)
 + (nonnull instancetype)iOSBlue;
 @end
 
 #pragma mark - // UIDevice //
+
+#pragma mark Public Interface
 
 @interface UIDevice (KMHGenerics)
 - (BOOL)isPortrait;
@@ -202,6 +242,8 @@ NS_REQUIRES_NIL_TERMINATION;
 @end
 
 #pragma mark - // UIImage //
+
+#pragma mark Public Interface
 
 @interface UIImage (KMHGenerics)
 - (nonnull instancetype)imageWithAlpha:(CGFloat)alpha;
@@ -213,11 +255,15 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // UINavigationBar //
 
+#pragma mark Public Interface
+
 @interface UINavigationBar (KMHGenerics)
 + (CGFloat)height;
 @end
 
 #pragma mark - // UINavigationController //
+
+#pragma mark Public Interface
 
 @interface UINavigationController (KMHGenerics)
 - (nullable UIViewController *)rootViewController;
@@ -225,11 +271,15 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // UIScreen //
 
+#pragma mark Public Interface
+
 @interface UIScreen (KMHGenerics)
 - (BOOL)isRetina;
 @end
 
 #pragma mark - // UIScrollView //
+
+#pragma mark Public Interface
 
 @interface UIScrollView (KMHGenerics)
 - (void)scrollToView:(nonnull UIView *)view animated:(BOOL)animated;
@@ -237,11 +287,15 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // UISegmentedControl //
 
+#pragma mark Public Interface
+
 @interface UISegmentedControl (KMHGenerics)
 - (nullable NSString *)selectedSegmentTitle;
 @end
 
 #pragma mark - // UIStoryboard //
+
+#pragma mark Public Interface
 
 @interface UIStoryboard (KMHGenerics)
 + (nullable UIViewController *)storyboard:(nonnull NSString *)name viewControllerWithIdentifier:(nonnull NSString *)identifier;
@@ -249,11 +303,15 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // UIStoryboardSegue //
 
+#pragma mark Public Interface
+
 @interface UIStoryboardSegue (KMHGenerics)
 - (nullable UIViewController *)contentDestinationViewController;
 @end
 
 #pragma mark - // UITableView //
+
+#pragma mark Public Interface
 
 @interface UITableView (KMHGenerics)
 - (void)refreshWithDuration:(NSTimeInterval)animationDuration block:(nullable void (^)(void))block;
@@ -273,6 +331,8 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // UITableViewCell //
 
+#pragma mark Public Interface
+
 @interface UITableViewCell (KMHGenerics)
 @property (nonatomic, strong, nullable) NSIndexPath *indexPath;
 + (nonnull instancetype)cellWithReuseIdentifier:(nullable NSString *)reuseIdentifier style:(UITableViewCellStyle)style tableView:(nonnull UITableView *)tableView atIndexPath:(nonnull NSIndexPath *)indexPath fromStoryboard:(BOOL)fromStoryboard;
@@ -281,6 +341,8 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // UITextField //
 
+#pragma mark Public Interface
+
 @interface UITextField (KMHGenerics)
 @property (nonatomic) BOOL selectable;
 - (void)selectTextInRange:(NSRange)range;
@@ -288,12 +350,16 @@ NS_REQUIRES_NIL_TERMINATION;
 
 #pragma mark - // UITextView //
 
+#pragma mark Public Interface
+
 @interface UITextView (KMHGenerics) <UITextViewDelegate>
 @property (nonatomic, strong, nullable) NSString *placeholder;
 - (void)showPlaceholder:(BOOL)show animated:(BOOL)animated;
 @end
 
 #pragma mark - // UIView //
+
+#pragma mark Public Interface
 
 @interface UIView (KMHGenerics)
 @property (nonatomic) CGFloat cornerRadius;
@@ -315,6 +381,8 @@ NS_REQUIRES_NIL_TERMINATION;
 @end
 
 #pragma mark - // UIViewController //
+
+#pragma mark Public Interface
 
 @interface UIViewController (KMHGenerics)
 @property (nonatomic, strong, nullable) NSDictionary *info;

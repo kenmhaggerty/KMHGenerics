@@ -11,21 +11,26 @@
 #pragma mark - // IMPORTS (Private) //
 
 #import "KMHGenerics+ImageLibrary.h"
-#import <QuartzCore/QuartzCore.h>
-#import <MobileCoreServices/MobileCoreServices.h>
-#import <AssetsLibrary/AssetsLibrary.h>
-#import <Photos/Photos.h>
 #import <objc/runtime.h>
+//#import <QuartzCore/QuartzCore.h>
 
-#pragma mark - // KMHGenerics //
+#pragma mark - // KMHGenerics (ImageLibrary) //
 
-@implementation KMHGenerics (ImageLibrary)
+#pragma mark Imports
 
-#pragma mark // NOTIFICATIONS //
+#import <AssetsLibrary/AssetsLibrary.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+#import <Photos/Photos.h>
+
+#pragma mark Notifications
 
 NSString * const CameraRollMostRecentImageDidChangeNotification = @"kCameraRollMostRecentImageDidChangeNotification";
 
-#pragma mark // SETTERS AND GETTERS (Private) //
+#pragma mark Implementation
+
+@implementation KMHGenerics (ImageLibrary)
+
+#pragma mark // Setters and Getters (Private) //
 
 - (void)setAssetsLibrary:(ALAssetsLibrary *)assetsLibrary {
     objc_setAssociatedObject(self, @selector(assetsLibrary), assetsLibrary, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -56,7 +61,7 @@ NSString * const CameraRollMostRecentImageDidChangeNotification = @"kCameraRollM
     return objc_getAssociatedObject(self, @selector(cameraRollMostRecentImage));;
 }
 
-#pragma mark // PUBLIC METHODS //
+#pragma mark // Public Methods //
 
 + (AVCaptureVideoOrientation)convertInterfaceOrientationToVideoOrientation:(UIInterfaceOrientation)interfaceOrientation {
     switch (interfaceOrientation) {
@@ -128,7 +133,7 @@ NSString * const CameraRollMostRecentImageDidChangeNotification = @"kCameraRollM
     [KMHGenerics getLastImageFromCameraRollUsingPhotosWithCompletion:setAndRecurseBlock];
 }
 
-#pragma mark // PRIVATE METHODS (General) //
+#pragma mark // Private Methods (General) //
 
 + (instancetype)imageLibraryGenerics {
     static KMHGenerics *_imageLibraryGenerics = nil;
@@ -142,7 +147,7 @@ NSString * const CameraRollMostRecentImageDidChangeNotification = @"kCameraRollM
     return _imageLibraryGenerics;
 }
 
-#pragma mark // PRIVATE METHODS (Observers) //
+#pragma mark // Private Methods (Observers) //
 
 - (void)addObserversToAssetsLibrary {
     [NSNotificationCenter addObserver:self selector:@selector(assetsLibraryDidChange:) name:ALAssetsLibraryChangedNotification object:nil];
@@ -152,14 +157,14 @@ NSString * const CameraRollMostRecentImageDidChangeNotification = @"kCameraRollM
 //    [NSNotificationCenter removeObserver:self name:ALAssetsLibraryChangedNotification object:nil];
 //}
 
-#pragma mark // PRIVATE METHODS (Responders) //
+#pragma mark // Private Methods (Responders) //
 
 - (void)assetsLibraryDidChange:(NSNotification *)notification {
     [KMHGenerics imageLibraryGenerics].cameraRollMostRecentImage = nil;
     [KMHGenerics getCameraRollThumbnailWithSize:CGSizeZero completion:nil];
 }
 
-#pragma mark // PRIVATE METHODS (Other) //
+#pragma mark // Private Methods (Other) //
 
 + (NSArray <NSString *> *)arrayForMediaType:(KMHMediaType)mediaType {
     switch (mediaType) {
@@ -301,7 +306,7 @@ NSString * const CameraRollMostRecentImageDidChangeNotification = @"kCameraRollM
 
 @end
 
-#pragma mark - // UIViewController //
+#pragma mark - // UIViewController (ImageLibrary) //
 
 #pragma mark Notifications
 
@@ -315,9 +320,11 @@ NSString * const KMHImagePickerSourceSelectorCameraPhotoOrVideo = @"Take Photo o
 NSString * const KMHImagePickerSourceSelectorPhotoLibrary = @"Photo Library";
 NSString * const KMHImagePickerSourceSelectorCameraRoll = @"Camera Roll";
 
+#pragma mark Implementation
+
 @implementation UIViewController (ImageLibrary)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (void)presentImageSourceSelectorWithMediaType:(KMHMediaType)mediaType cameraType:(KMHCameraType)cameraType libraryType:(KMHImageLibraryType)libraryType delegate:(nullable id <KMHImageSourceSelectorDelegate>)delegate completion:(nullable void (^)(UIAlertController * _Nonnull alertController))completionBlock {
     
@@ -372,7 +379,7 @@ NSString * const KMHImagePickerSourceSelectorCameraRoll = @"Camera Roll";
     [self presentImagePickerWithSource:UIImagePickerControllerSourceTypePhotoLibrary mediaType:mediaType delegate:delegate setup:setupBlock completion:completionBlock];
 }
 
-#pragma mark Private Methods
+#pragma mark // Private Methods //
 
 + (NSString *)actionForMediaType:(KMHMediaType)mediaType {
     switch (mediaType) {

@@ -12,7 +12,7 @@
 
 #pragma mark - // IMPORTS (Public) //
 
-#pragma mark - // KMHGenerics //
+#pragma mark - // KMHGenerics (Reachability) //
 
 #pragma mark Notifications
 
@@ -21,7 +21,6 @@ extern NSString * const ReachabilityNotificationObjectKey;
 extern NSString * const InternetStatusDidChangeNotification;
 extern NSString * const PublicIPAddressDidChangeNotification;
 extern NSString * const PrivateIPAddressDidChangeNotification;
-
 extern NSString * const ReachabilityDidReceiveErrorNotification;
 
 #pragma mark Protocols
@@ -38,6 +37,8 @@ typedef enum {
     AKInternetConnectedViaWiFi,
     AKInternetStatusUnknown,
 } AKInternetStatus;
+
+#pragma mark Public Interface
 
 @interface KMHGenerics (Reachability) <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 

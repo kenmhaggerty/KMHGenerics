@@ -12,11 +12,14 @@
 
 #import "KMHGenerics+Reachability.h"
 #import <objc/runtime.h>
+
+#pragma mark - // KMHGenerics (Reachability) //
+
+#pragma mark Imports
+
 #import "Reachability.h"
 #include <ifaddrs.h>
 #include <arpa/inet.h>
-
-#pragma mark - // KMHGenerics //
 
 #pragma mark Notifications
 
@@ -25,7 +28,6 @@ NSString * const ReachabilityNotificationObjectKey = @"object";
 NSString * const InternetStatusDidChangeNotification = @"kInternetStatusDidChangeNotification";
 NSString * const PublicIPAddressDidChangeNotification = @"kPublicIPAddressDidChangeNotification";
 NSString * const PrivateIPAddressDidChangeNotification = @"kPrivateIPAddressDidChangeNotification";
-
 NSString * const ReachabilityDidReceiveErrorNotification = @"kReachabilityDidReceiveErrorNotification";
 
 #pragma mark Constants
@@ -36,9 +38,11 @@ NSTimeInterval const INTERNET_MAX_ATTEMPTS_TIME = 1.0f;
 NSString * const PublicIPAddressURL = @"https://api.ipify.org?format=json";
 NSString * const PublicIPAddressKey = @"ip";
 
+#pragma mark Implementation
+
 @implementation KMHGenerics (Reachability)
 
-#pragma mark Setters and Getters (Public)
+#pragma mark // Setters and Getters (Private) //
 
 - (void)setDomainDelegate:(id <ReachabilityDomainDelegate>)domainDelegate {
     objc_setAssociatedObject(self, @selector(domainDelegate), domainDelegate, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -47,8 +51,6 @@ NSString * const PublicIPAddressKey = @"ip";
 - (id <ReachabilityDomainDelegate>)domainDelegate {
     return objc_getAssociatedObject(self, @selector(domainDelegate));
 }
-
-#pragma mark Setters and Getters (Private)
 
 - (void)setReachability:(Reachability *)reachability {
     if ([KMHGenerics object:reachability isEqualToObject:self.reachability]) {
@@ -148,13 +150,13 @@ NSString * const PublicIPAddressKey = @"ip";
     return objc_getAssociatedObject(self, @selector(publicIPAddressData));
 }
 
-#pragma mark Public Methods (Setup)
+#pragma mark // Public Methods (Setup) //
 
 + (void)setDomainDelegate:(id <ReachabilityDomainDelegate>)domainDelegate {
     [KMHGenerics reachabilityGenerics].domainDelegate = domainDelegate;
 }
 
-#pragma mark Public Methods (General)
+#pragma mark // Public Methods (General) //
 
 + (AKInternetStatus)internetStatus {
     return [KMHGenerics reachabilityGenerics].internetStatus;
@@ -262,7 +264,7 @@ NSString * const PublicIPAddressKey = @"ip";
     self.publicIPAddress = jsonObject[PublicIPAddressKey];
 }
 
-#pragma mark Private Methods (General)
+#pragma mark // Private Methods (General) //
 
 + (instancetype)reachabilityGenerics {
     static KMHGenerics *_reachabilityGenerics = nil;
@@ -274,7 +276,7 @@ NSString * const PublicIPAddressKey = @"ip";
     return _reachabilityGenerics;
 }
 
-#pragma mark Private Methods (Convenience)
+#pragma mark // Private Methods (Convenience) //
 
 + (id <ReachabilityDomainDelegate>)domainDelegate {
     return [KMHGenerics reachabilityGenerics].domainDelegate;
@@ -284,19 +286,19 @@ NSString * const PublicIPAddressKey = @"ip";
     return [KMHGenerics reachabilityGenerics].userDefaults;
 }
 
-#pragma mark Private Methods (Observers)
+#pragma mark // Private Methods (Observers) //
 
 - (void)addObserversToReachability {
     [NSNotificationCenter addObserver:self selector:@selector(internetStatusDidChange:) name:kReachabilityChangedNotification object:self.reachability];
 }
 
-#pragma mark Private Methods (Responders)
+#pragma mark // Private Methods (Responders) //
 
 - (void)internetStatusDidChange:(NSNotification *)notification {
     [KMHGenerics refreshInternetStatus];
 }
 
-#pragma mark Private Methods (Other)
+#pragma mark // Private Methods (Other) //
 
 + (void)updateInternetStatus {
     if ([KMHGenerics isReachableViaWiFi]) {

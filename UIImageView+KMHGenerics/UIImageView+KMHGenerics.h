@@ -8,11 +8,11 @@
 
 #pragma mark - // NOTES (Public) //
 
-#pragma mark - // UIImageView //
-
-#pragma mark Imports
+#pragma mark - // IMPORTS (Public) //
 
 #import <Foundation/Foundation.h>
+
+#pragma mark - // UIImageView (Swizzled) //
 
 #pragma mark Notifications
 

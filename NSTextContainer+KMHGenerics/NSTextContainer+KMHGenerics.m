@@ -13,13 +13,19 @@
 #import "NSTextContainer+KMHGenerics.h"
 #import <objc/runtime.h>
 
-#pragma mark - // NSObject //
+#pragma mark - // NSObject (Swizzle) //
 
-@interface NSObject (Swizzled)
+#pragma mark Interface (Swizzle)
+
+@interface NSObject (Swizzle)
 - (void)swizzleMethod:(SEL)originalSelector withMethod:(SEL)swizzledSelector;
 @end
 
-@implementation NSObject (Swizzled)
+#pragma mark Implementation
+
+@implementation NSObject (Swizzle)
+
+#pragma mark // Methods (Swizzle) //
 
 // copied w/ modifications via Mattt Thompson's tutorial at http://nshipster.com/method-swizzling/
 - (void)swizzleMethod:(SEL)originalSelector withMethod:(SEL)swizzledSelector {
@@ -44,7 +50,7 @@
 
 @end
 
-#pragma mark - // NSTextContainer //
+#pragma mark - // NSTextContainer (Swizzled) //
 
 #pragma mark Notifications
 
@@ -52,11 +58,11 @@ NSString * const NSTextContainerNotificationObjectKey = @"kNSTextContainerNotifi
 
 NSString * const NSTextContainerLineBreakModeDidChangeNotification = @"NSTextContainerLineBreakModeDidChangeNotification";
 
-#pragma mark Methods
+#pragma mark Implementation
 
-@implementation NSTextContainer (KMHGenerics)
+@implementation NSTextContainer (Swizzled)
 
-#pragma mark Inits and Loads
+#pragma mark // Inits and Loads //
 
 + (void)load {
     static dispatch_once_t onceToken;
@@ -65,7 +71,7 @@ NSString * const NSTextContainerLineBreakModeDidChangeNotification = @"NSTextCon
     });
 }
 
-#pragma mark Swizzled Methods
+#pragma mark // Swizzled Methods //
 
 - (void)swizzled_setLineBreakMode:(NSLineBreakMode)lineBreakMode {
     NSLineBreakMode primitiveLineBreakMode = self.lineBreakMode;

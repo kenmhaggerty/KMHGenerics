@@ -14,13 +14,19 @@
 #import <UIKit/UIKit.h>
 #import <objc/runtime.h>
 
-#pragma mark - // NSObject //
+#pragma mark - // NSObject (Swizzle) //
 
-@interface NSObject (Swizzled)
+#pragma mark Interface (Swizzle)
+
+@interface NSObject (Swizzle)
 - (void)swizzleMethod:(SEL)originalSelector withMethod:(SEL)swizzledSelector;
 @end
 
-@implementation NSObject (Swizzled)
+#pragma mark Implementation
+
+@implementation NSObject (Swizzle)
+
+#pragma mark // Methods (Swizzle) //
 
 // copied w/ modifications via Mattt Thompson's tutorial at http://nshipster.com/method-swizzling/
 - (void)swizzleMethod:(SEL)originalSelector withMethod:(SEL)swizzledSelector {
@@ -45,9 +51,7 @@
 
 @end
 
-#pragma mark - // UIViewController //
-
-@implementation UIViewController (KMHGenerics)
+#pragma mark - // UIViewController (Swizzled) //
 
 #pragma mark Notifications
 
@@ -55,7 +59,11 @@ NSString * const UIViewControllerNotificationObjectKey = @"object";
 
 NSString * const UIViewControllerEditingDidChangeNotification = @"kUIViewControllerEditingDidChangeNotification";
 
-#pragma mark Inits and Loads
+#pragma mark Implementation
+
+@implementation UIViewController (Swizzled)
+
+#pragma mark // Inits and Loads //
 
 + (void)load {
     static dispatch_once_t onceToken;
@@ -64,7 +72,7 @@ NSString * const UIViewControllerEditingDidChangeNotification = @"kUIViewControl
     });
 }
 
-#pragma mark Swizzled Methods
+#pragma mark // Swizzled Methods //
 
 - (void)swizzled_setEditing:(BOOL)editing {
     if (editing == self.editing) {

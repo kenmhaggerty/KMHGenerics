@@ -12,7 +12,7 @@
 
 #import <UIKit/UIKit.h>
 
-#pragma mark - // UINavigationItem //
+#pragma mark - // UINavigationItem (Swizzled) //
 
 #pragma mark Notifications
 
@@ -23,9 +23,9 @@ extern NSString * const UINavigationItemPromptDidChangeNotification;
 extern NSString * const UINavigationItemLeftBarButtonItemsDidChangeNotification;
 extern NSString * const UINavigationItemRightBarButtonItemsDidChangeNotification;
 
-#pragma mark Methods
+#pragma mark Public Interface
 
-@interface UINavigationItem (KMHGenerics)
+@interface UINavigationItem (Swizzled)
 @property (nonatomic) BOOL hidesLeftBarButtonItems;
 @property (nonatomic) BOOL hidesTitleView;
 @property (nonatomic) BOOL hidesRightBarButtonItems;

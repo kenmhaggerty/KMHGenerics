@@ -12,7 +12,7 @@
 
 #import <Foundation/Foundation.h>
 
-#pragma mark - // UIViewController //
+#pragma mark - // UIViewController (Swizzled) //
 
 #pragma mark Notifications
 

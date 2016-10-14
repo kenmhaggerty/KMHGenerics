@@ -12,7 +12,7 @@
 
 #import <UIKit/UIKit.h>
 
-#pragma mark - // NSTextContainer //
+#pragma mark - // NSTextContainer (Swizzled) //
 
 #pragma mark Notifications
 

@@ -14,13 +14,19 @@
 #import <UIKit/UIKit.h>
 #import <objc/runtime.h>
 
-#pragma mark - // NSObject //
+#pragma mark - // NSObject (Swizzle) //
 
-@interface NSObject (Swizzled)
+#pragma mark Interface (Swizzle)
+
+@interface NSObject (Swizzle)
 - (void)swizzleMethod:(SEL)originalSelector withMethod:(SEL)swizzledSelector;
 @end
 
-@implementation NSObject (Swizzled)
+#pragma mark Implementation
+
+@implementation NSObject (Swizzle)
+
+#pragma mark // Methods (Swizzle) //
 
 // copied w/ modifications via Mattt Thompson's tutorial at http://nshipster.com/method-swizzling/
 - (void)swizzleMethod:(SEL)originalSelector withMethod:(SEL)swizzledSelector {
@@ -45,7 +51,7 @@
 
 @end
 
-#pragma mark - // UIImageView //
+#pragma mark - // UIImageView (Swizzled) //
 
 #pragma mark Notifications
 
@@ -53,9 +59,11 @@ NSString * const UIImageViewNotificationObjectKey = @"object";
 
 NSString * const UIImageViewImageDidChangeNotification = @"kUIImageViewImageDidChangeNotification";
 
-@implementation UIImageView (KMHGenerics)
+#pragma mark Implementation
 
-#pragma mark Inits and Loads
+@implementation UIImageView (Swizzled)
+
+#pragma mark // Inits and Loads //
 
 + (void)load {
     static dispatch_once_t onceToken;
@@ -64,7 +72,7 @@ NSString * const UIImageViewImageDidChangeNotification = @"kUIImageViewImageDidC
     });
 }
 
-#pragma mark Swizzled Methods
+#pragma mark // Swizzled Methods //
 
 - (void)swizzled_setImage:(UIImage *)image {
     UIImage *primitiveImage = self.image;

@@ -13,13 +13,13 @@
 #import "KMHGenerics.h"
 #import <AVFoundation/AVFoundation.h>
 
-#pragma mark - // KMHGenerics //
+#pragma mark - // KMHGenerics (ImageLibrary) //
 
 #pragma mark Notifications
 
 extern NSString * const CameraRollMostRecentImageDidChangeNotification;
 
-#pragma mark Methods
+#pragma mark Public Interface
 
 @interface KMHGenerics (ImageLibrary)
 + (AVCaptureVideoOrientation)convertInterfaceOrientationToVideoOrientation:(UIInterfaceOrientation)interfaceOrientation;
@@ -34,7 +34,7 @@ extern NSString * const CameraRollMostRecentImageDidChangeNotification;
 + (void)getCameraRollThumbnailWithSize:(CGSize)size completion:(void (^)(UIImage *thumbnail, NSError *error))completionBlock;
 @end
 
-#pragma mark - // UIViewController //
+#pragma mark - // UIViewController (ImageLibrary) //
 
 #pragma mark Protocols
 
@@ -71,7 +71,7 @@ typedef enum : NSUInteger {
     KMHCameraTypeFrontOrRear,
 } KMHCameraType;
 
-#pragma mark Methods
+#pragma mark Public Interface
 
 @interface UIViewController (ImageLibrary)
 - (void)presentImageSourceSelectorWithMediaType:(KMHMediaType)mediaType cameraType:(KMHCameraType)cameraType libraryType:(KMHImageLibraryType)libraryType delegate:(id <KMHImageSourceSelectorDelegate>)delegate completion:(void (^)(UIAlertController * alertController))completionBlock;

@@ -13,13 +13,19 @@
 #import "UINavigationItem+KMHGenerics.h"
 #import <objc/runtime.h>
 
-#pragma mark - // NSObject //
+#pragma mark - // NSObject (Swizzle) //
 
-@interface NSObject (Swizzled)
+#pragma mark Interface (Swizzle)
+
+@interface NSObject (Swizzle)
 - (void)swizzleMethod:(SEL)originalSelector withMethod:(SEL)swizzledSelector;
 @end
 
-@implementation NSObject (Swizzled)
+#pragma mark Implementation
+
+@implementation NSObject (Swizzle)
+
+#pragma mark // Methods (Swizzle) //
 
 // copied w/ modifications via Mattt Thompson's tutorial at http://nshipster.com/method-swizzling/
 - (void)swizzleMethod:(SEL)originalSelector withMethod:(SEL)swizzledSelector {
@@ -44,7 +50,7 @@
 
 @end
 
-#pragma mark - // UINavigationItem //
+#pragma mark - // UINavigationItem (Swizzled) //
 
 #pragma mark Notifications
 
@@ -55,9 +61,11 @@ NSString * const UINavigationItemPromptDidChangeNotification = @"kUINavigationIt
 NSString * const UINavigationItemLeftBarButtonItemsDidChangeNotification = @"kUINavigationItemLeftBarButtonItemsDidChangeNotification";
 NSString * const UINavigationItemRightBarButtonItemsDidChangeNotification = @"kUINavigationItemRightBarButtonItemsDidChangeNotification";
 
-@implementation UINavigationItem (KMHGenerics)
+#pragma mark Implementation
 
-#pragma mark Setters and Getters (Public)
+@implementation UINavigationItem (Swizzled)
+
+#pragma mark // Setters and Getters (Public) //
 
 - (void)setHidesLeftBarButtonItems:(BOOL)hidesLeftBarButtonItems {
     if (hidesLeftBarButtonItems) {
@@ -132,7 +140,7 @@ NSString * const UINavigationItemRightBarButtonItemsDidChangeNotification = @"kU
     return self.hidesRightBarButtonItems;
 }
 
-#pragma mark Setters and Getters (Private)
+#pragma mark // Setters and Getters (Private) //
 
 - (void)setStoredLeftBarButtonItems:(NSArray <UIBarButtonItem *> *)storedLeftBarButtonItems {
     objc_setAssociatedObject(self, @selector(storedLeftBarButtonItems), storedLeftBarButtonItems, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -158,7 +166,7 @@ NSString * const UINavigationItemRightBarButtonItemsDidChangeNotification = @"kU
     return objc_getAssociatedObject(self, @selector(storedRightBarButtonItems));
 }
 
-#pragma mark Inits and Loads
+#pragma mark // Inits and Loads //
 
 + (void)load {
     static dispatch_once_t onceToken;
@@ -170,7 +178,7 @@ NSString * const UINavigationItemRightBarButtonItemsDidChangeNotification = @"kU
     });
 }
 
-#pragma mark Swizzled Methods
+#pragma mark // Swizzled Methods //
 
 - (void)swizzled_setTitle:(NSString *)title {
     if ((!title && !self.title) || ([title isEqualToString:self.title])) {

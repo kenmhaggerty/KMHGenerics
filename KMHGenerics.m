@@ -13,19 +13,23 @@
 #import "KMHGenerics.h"
 #import <objc/runtime.h>
 
-#pragma mark - // DEFINITIONS (Private) //
+#pragma mark - // KMHGenerics //
+
+#pragma mark Notifications
 
 NSString * _Nonnull const NOTIFICATION_OBJECT_KEY = @"kNotificationUserInfo_Object";
+
+#pragma mark Private Interface
 
 @interface KMHGenerics ()
 CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians);
 @end
 
-#pragma mark - // KMHGenerics //
+#pragma mark Implementation
 
 @implementation KMHGenerics
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 + (BOOL)object:(nullable id)object1 isEqualToObject:(nullable id)object2 {
     // nil == nil
@@ -232,7 +236,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians);
     return CGSizeMake(size.width*scale, size.height*scale);
 }
 
-#pragma mark Private Methods
+#pragma mark // Private Methods //
 
 CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     CGSize imageSize = CGSizeMake(CGImageGetWidth(originalCGImage), CGImageGetHeight(originalCGImage));
@@ -368,9 +372,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // NSArray //
 
+#pragma mark Implementation
+
 @implementation NSArray (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 + (nonnull instancetype)arrayWithNullableObject:(id)anObject {
     if (anObject) {
@@ -595,7 +601,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return self[self.count-2];
 }
 
-#pragma mark Private Methods
+#pragma mark // Private Methods //
 
 + (NSNumber *)sortValueForObject:(id _Nonnull)obj {
     if ([obj isKindOfClass:[NSNumber class]]) {
@@ -633,9 +639,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #import <CommonCrypto/CommonCryptor.h>
 
+#pragma mark Implementation
+
 @implementation NSData (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 // I believe this came from this StackOverflow post:
 // http://stackoverflow.com/questions/9794383/aes256-decryption-issue-in-objective-c
@@ -714,9 +722,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // NSDate //
 
+#pragma mark Implementation
+
 @implementation NSDate (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (nonnull instancetype)dateRoundedToPrecision:(NSUInteger)decimalPoints {
     NSTimeInterval timeInterval = self.timeIntervalSince1970;
@@ -733,9 +743,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // NSDictionary //
 
+#pragma mark Implementation
+
 @implementation NSDictionary (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 + (nonnull instancetype)dictionaryWithNullableObject:(nullable id)object forKey:(nonnull id <NSCopying>)key {
     if (!object) {
@@ -791,7 +803,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // NSIndexSet //
 
+#pragma mark Implementation
+
 @implementation NSIndexSet (KMHGenerics)
+
+#pragma mark // Public Methods //
 
 + (nonnull instancetype)indexSetWithArray:(nonnull NSArray <NSNumber *> *)array {
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
@@ -813,9 +829,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // NSMutableArray //
 
+#pragma mark Implementation
+
 @implementation NSMutableArray (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (void)removeFirstObject {
     [self removeObjectAtIndex:0];
@@ -825,9 +843,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // NSMutableDictionary //
 
+#pragma mark Implementation
+
 @implementation NSMutableDictionary (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (void)setNullableObject:(nullable id)anObject forKey:(nonnull id <NSCopying>)aKey {
     if (!anObject) {
@@ -841,9 +861,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // NSNotificationCenter //
 
+#pragma mark Implementation
+
 @implementation NSNotificationCenter (KMHGenerics)
 
-#pragma mark - Public Methods
+#pragma mark // Public Methods //
 
 + (void)addObserver:(nonnull id)notificationObserver selector:(nonnull SEL)notificationSelector name:(nullable NSString *)notificationName object:(nullable id)notificationSender {
     [[NSNotificationCenter defaultCenter] addObserver:notificationObserver selector:notificationSelector name:notificationName object:notificationSender];
@@ -868,9 +890,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // NSObject //
 
+#pragma mark Implementation
+
 @implementation NSObject (KMHGenerics)
 
-#pragma mark Setters and Getters
+#pragma mark // Setters and Getters (Private) //
 
 - (void)setSetupComplete:(BOOL)setupComplete {
     objc_setAssociatedObject(self, @selector(setupComplete), @(setupComplete), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -911,7 +935,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return tokens;
 }
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (void)setup {
     [self setup:nil];
@@ -977,9 +1001,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // NSOrderedSet //
 
+#pragma mark Implementation
+
 @implementation NSOrderedSet (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (nonnull instancetype)orderedSetByRemovingObject:(nonnull id)anObject {
     NSMutableOrderedSet *mutableOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self];
@@ -997,9 +1023,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // NSSet //
 
+#pragma mark Implementation
+
 @implementation NSSet (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (nonnull instancetype)setByRemovingObject:(nonnull id)anObject {
     NSMutableSet *mutableSet = [NSMutableSet setWithSet:self];
@@ -1051,9 +1079,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // NSString //
 
+#pragma mark Implementation
+
 @implementation NSString (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 + (nonnull instancetype)randomStringWithCharacters:(nonnull NSString *)charactersString length:(NSUInteger)length {
     NSMutableString *randomString = [[NSMutableString alloc] initWithCapacity:length];
@@ -1099,9 +1129,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // NSUUID //
 
+#pragma mark Implementation
+
 @implementation NSUUID (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 + (nonnull NSUUID *)uuidWithValidator:(nullable BOOL(^)(NSUUID * _Nonnull uuid))validationBlock {
     NSUUID *uuid;
@@ -1115,9 +1147,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UIAlertController //
 
+#pragma mark Implementation
+
 @implementation UIAlertController (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 + (nonnull instancetype)alertControllerWithTitle:(nullable NSString *)title message:(nullable NSString *)message preferredStyle:(UIAlertControllerStyle)preferredStyle actions:(nullable NSArray <NSString *> *)actions preferredAction:(nullable NSString *)preferredAction dismissalText:(nullable NSString *)dismissalText completion:(nullable void(^)(UIAlertAction * _Nonnull action, NSArray <UITextField *> * _Nonnull textFields))completionBlock {
     UIAlertController *alertController = [[self class] alertControllerWithTitle:title message:message preferredStyle:preferredStyle];
@@ -1155,9 +1189,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UIButton //
 
+#pragma mark Implementation
+
 @implementation UIButton (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (void)setText:(nullable NSString *)text {
     [self setTitle:text forState:UIControlStateNormal];
@@ -1187,9 +1223,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UICollectionViewCell //
 
+#pragma mark Implementation
+
 @implementation UICollectionViewCell (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 + (nonnull instancetype)cellWithReuseIdentifier:(nullable NSString *)reuseIdentifier collectionView:(nonnull UICollectionView *)collectionView atIndexPath:(nonnull NSIndexPath *)indexPath {
     return [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];;
@@ -1199,7 +1237,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UIColor //
 
+#pragma mark Implementation
+
 @implementation UIColor (KMHGenerics)
+
+#pragma mark Public Methods
 
 + (nonnull instancetype)iOSBlue {
     return [[self class] colorWithHue:0.58692810457516342 saturation:1.0 brightness:1.0f alpha:1.0f];
@@ -1209,9 +1251,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UIDevice //
 
+#pragma mark Implementation
+
 @implementation UIDevice (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (BOOL)isPortrait {
     return UIDeviceOrientationIsPortrait(self.orientation);
@@ -1225,9 +1269,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UIImage //
 
+#pragma mark Implementation
+
 @implementation UIImage (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (nonnull instancetype)imageWithAlpha:(CGFloat)alpha {
     UIGraphicsBeginImageContextWithOptions(self.size, NO, 0.0f);
@@ -1322,9 +1368,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UINavigationBar //
 
+#pragma mark Implementation
+
 @implementation UINavigationBar (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 + (CGFloat)height {
     return [[UINavigationController alloc] init].navigationBar.frame.size.height;
@@ -1334,9 +1382,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UINavigationController //
 
+#pragma mark Implementation
+
 @implementation UINavigationController (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (nullable UIViewController *)rootViewController {
     return self.viewControllers.firstObject;
@@ -1346,9 +1396,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UIScreen //
 
+#pragma mark Implementation
+
 @implementation UIScreen (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (BOOL)isRetina {
     return (self.scale > 1.0f);
@@ -1358,9 +1410,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UIScrollView //
 
+#pragma mark Implementation
+
 @implementation UIScrollView (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (void)scrollToView:(nonnull UIView *)view animated:(BOOL)animated {
     if (![view isEventualSubviewOfView:self]) {
@@ -1375,9 +1429,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UISegmentedControl //
 
+#pragma mark Implementation
+
 @implementation UISegmentedControl (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (nullable NSString *)selectedSegmentTitle {
     return [self titleForSegmentAtIndex:self.selectedSegmentIndex];
@@ -1387,9 +1443,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UIStoryboard //
 
+#pragma mark Implementation
+
 @implementation UIStoryboard (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 + (nullable UIViewController *)storyboard:(nonnull NSString *)name viewControllerWithIdentifier:(nonnull NSString *)identifier {
     return [[UIStoryboard storyboardWithName:name bundle:nil] instantiateViewControllerWithIdentifier:identifier];
@@ -1399,9 +1457,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UIStoryboardSegue //
 
+#pragma mark Implementation
+
 @implementation UIStoryboardSegue (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (nullable UIViewController *)contentDestinationViewController {
     if ([self.destinationViewController isKindOfClass:[UINavigationController class]]) {
@@ -1421,9 +1481,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UITableView //
 
+#pragma mark Implementation
+
 @implementation UITableView (KMHGenerics)
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (void)refreshWithDuration:(NSTimeInterval)animationDuration block:(nullable void (^)(void))block {
     [self beginUpdates];
@@ -1625,9 +1687,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UITableViewCell //
 
+#pragma mark Implementation
+
 @implementation UITableViewCell (KMHGenerics)
 
-#pragma mark Setters and Getters
+#pragma mark // Setters and Getters (Public) //
 
 - (void)setIndexPath:(NSIndexPath *)indexPath {
     objc_setAssociatedObject(self, @selector(indexPath), indexPath, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -1637,7 +1701,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return objc_getAssociatedObject(self, @selector(indexPath));
 }
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 + (nonnull instancetype)cellWithReuseIdentifier:(nullable NSString *)reuseIdentifier style:(UITableViewCellStyle)style tableView:(nonnull UITableView *)tableView atIndexPath:(nonnull NSIndexPath *)indexPath fromStoryboard:(BOOL)fromStoryboard {
     if (([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) || (!fromStoryboard)) {
@@ -1659,9 +1723,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark - // UITextField //
 
+#pragma mark Implementation
+
 @implementation UITextField (KMHGenerics)
 
-#pragma mark Setters and Getters
+#pragma mark // Setters and Getters (Public) //
 
 - (void)setSelectable:(BOOL)selectable {
     objc_setAssociatedObject(self, @selector(selectable), @(selectable), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -1677,7 +1743,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return self.selectable;
 }
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (void)selectTextInRange:(NSRange)range {
     UITextPosition *start = [self positionFromPosition:[self beginningOfDocument] offset:range.location];
@@ -1685,7 +1751,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     [self setSelectedTextRange:[self textRangeFromPosition:start toPosition:end]];
 }
 
-#pragma mark Overwritten Methods
+#pragma mark // Overwritten Methods //
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     if (!self.selectable) {
@@ -1704,9 +1770,11 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 CGFloat const UITextViewPlaceholderAlpha = 0.33f;
 CGFloat const UITextViewAnimationSpeed = 0.18f;
 
+#pragma mark Implementation
+
 @implementation UITextView (KMHGenerics)
 
-#pragma mark Setters and Getters
+#pragma mark // Setters and Getters (Public) //
 
 - (void)setPlaceholder:(NSString *)placeholder {
     self.placeholderTextView.text = placeholder;
@@ -1715,6 +1783,8 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
 - (NSString *)placeholder {
     return self.placeholderTextView.text;
 }
+
+#pragma mark // Setters and Getters (Private) //
 
 - (void)setPlaceholderTextView:(UITextView *)placeholderTextView {
     objc_setAssociatedObject(self, @selector(placeholderTextView), placeholderTextView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -1749,7 +1819,7 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
     return self.placeholderTextView;
 }
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (void)showPlaceholder:(BOOL)show animated:(BOOL)animated {
     [UIView animateWithDuration:(animated ? UITextViewAnimationSpeed : 0) animations:^{
@@ -1758,7 +1828,7 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
 }
 
 
-#pragma mark Overwritten Methods
+#pragma mark // Overwritten Methods //
 
 - (void)layoutIfNeeded {
     [super layoutIfNeeded];
@@ -1770,9 +1840,11 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
 
 #pragma mark - // UIView //
 
+#pragma mark Implementation
+
 @implementation UIView (KMHGenerics)
 
-#pragma mark Setters and Getters
+#pragma mark // Setters and Getters (Public) //
 
 - (void)setCornerRadius:(CGFloat)cornerRadius {
     self.layer.cornerRadius = cornerRadius;
@@ -1782,7 +1854,7 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
     return self.layer.cornerRadius;
 }
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 + (nullable instancetype)loadViewFromNibNamed:(nonnull NSString *)name withOwner:(nullable id)owner options:(nullable NSDictionary *)options {
     NSArray <UIView *> *views = [[NSBundle mainBundle] loadNibNamed:name owner:owner options:options];
@@ -1931,7 +2003,7 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
     [self addConstraint:[NSLayoutConstraint constraintWithItem:subview attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:multiplier constant:0.0f]];
 }
 
-#pragma mark Private Methods
+#pragma mark // Private Methods //
 
 - (void)flipWithRotationAxis:(CGPoint)rotationAxis radians:(CGFloat)radians withAnimations:(nullable void (^)(void))animations duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(nullable void (^)(BOOL))completion {
     CATransform3D rotationAndPerspectiveTransform = CATransform3DIdentity;
@@ -1949,9 +2021,11 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
 
 #pragma mark - // UIViewController //
 
+#pragma mark Implementation
+
 @implementation UIViewController (KMHGenerics)
 
-#pragma mark Setters and Getters
+#pragma mark // Setters and Getters (Public) //
 
 - (void)setInfo:(nullable NSDictionary *)info {
     objc_setAssociatedObject(self, @selector(info), info, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -1975,7 +2049,7 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
     return self.isModal;
 }
 
-#pragma mark Public Methods
+#pragma mark // Public Methods //
 
 - (nullable UIViewController *)priorViewController {
     if (!self.navigationController || ![self.navigationController.viewControllers containsObject:self]) {
