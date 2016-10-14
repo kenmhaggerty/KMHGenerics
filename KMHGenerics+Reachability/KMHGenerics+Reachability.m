@@ -151,13 +151,13 @@ NSString * const PublicIPAddressKey = @"ip";
 #pragma mark Public Methods (Setup)
 
 + (void)setDomainDelegate:(id <ReachabilityDomainDelegate>)domainDelegate {
-    [KMHGenerics sharedGenerics].domainDelegate = domainDelegate;
+    [KMHGenerics reachabilityGenerics].domainDelegate = domainDelegate;
 }
 
 #pragma mark Public Methods (General)
 
 + (AKInternetStatus)internetStatus {
-    return [KMHGenerics sharedGenerics].internetStatus;
+    return [KMHGenerics reachabilityGenerics].internetStatus;
 }
 
 + (BOOL)isReachable {
@@ -173,7 +173,7 @@ NSString * const PublicIPAddressKey = @"ip";
     BOOL isReachable;
     NSDate *startDate = [NSDate date];
     do {
-        isReachable = [KMHGenerics sharedGenerics].reachability.isReachableViaWiFi;
+        isReachable = [KMHGenerics reachabilityGenerics].reachability.isReachableViaWiFi;
     } while (!isReachable && (!INTERNET_MAX_ATTEMPTS_COUNT || (++attempt < INTERNET_MAX_ATTEMPTS_COUNT)) && (!INTERNET_MAX_ATTEMPTS_TIME || ([[NSDate date] timeIntervalSinceDate:startDate] < INTERNET_MAX_ATTEMPTS_TIME)));
     return isReachable;
 }
@@ -187,7 +187,7 @@ NSString * const PublicIPAddressKey = @"ip";
     BOOL isReachable;
     NSDate *startDate = [NSDate date];
     do {
-        isReachable = [KMHGenerics sharedGenerics].reachability.isReachableViaWWAN;
+        isReachable = [KMHGenerics reachabilityGenerics].reachability.isReachableViaWWAN;
     } while (!isReachable && (!INTERNET_MAX_ATTEMPTS_COUNT || (++attempt < INTERNET_MAX_ATTEMPTS_COUNT)) && (!INTERNET_MAX_ATTEMPTS_TIME || ([[NSDate date] timeIntervalSinceDate:startDate] < INTERNET_MAX_ATTEMPTS_TIME)));
     return isReachable;
 }
@@ -227,11 +227,11 @@ NSString * const PublicIPAddressKey = @"ip";
 }
 
 + (NSString *)publicIPAddress {
-    return [KMHGenerics sharedGenerics].publicIPAddress;
+    return [KMHGenerics reachabilityGenerics].publicIPAddress;
 }
 
 + (NSString *)privateIPAddress {
-    return [KMHGenerics sharedGenerics].privateIPAddress;
+    return [KMHGenerics reachabilityGenerics].privateIPAddress;
 }
 
 + (void)refreshInternetStatus {
@@ -264,24 +264,24 @@ NSString * const PublicIPAddressKey = @"ip";
 
 #pragma mark Private Methods (General)
 
-+ (instancetype)sharedGenerics {
-    static KMHGenerics *_sharedGenerics = nil;
++ (instancetype)reachabilityGenerics {
+    static KMHGenerics *_reachabilityGenerics = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedGenerics = [[KMHGenerics alloc] init];
-        [_sharedGenerics addObserversToReachability];
+        _reachabilityGenerics = [[KMHGenerics alloc] init];
+        [_reachabilityGenerics addObserversToReachability];
     });
-    return _sharedGenerics;
+    return _reachabilityGenerics;
 }
 
 #pragma mark Private Methods (Convenience)
 
 + (id <ReachabilityDomainDelegate>)domainDelegate {
-    return [KMHGenerics sharedGenerics].domainDelegate;
+    return [KMHGenerics reachabilityGenerics].domainDelegate;
 }
 
 + (NSUserDefaults *)userDefaults {
-    return [KMHGenerics sharedGenerics].userDefaults;
+    return [KMHGenerics reachabilityGenerics].userDefaults;
 }
 
 #pragma mark Private Methods (Observers)
@@ -311,7 +311,7 @@ NSString * const PublicIPAddressKey = @"ip";
 }
 
 + (void)setInternetStatus:(AKInternetStatus)internetStatus {
-    [KMHGenerics sharedGenerics].internetStatus = internetStatus;
+    [KMHGenerics reachabilityGenerics].internetStatus = internetStatus;
 }
 
 + (void)fetchPublicIPAddress {
@@ -320,7 +320,7 @@ NSString * const PublicIPAddressKey = @"ip";
     }
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:PublicIPAddressURL]];
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:[KMHGenerics sharedGenerics]];
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:[KMHGenerics reachabilityGenerics]];
     [connection start];
 }
 
@@ -354,7 +354,7 @@ NSString * const PublicIPAddressKey = @"ip";
     }
     // Free memory
     freeifaddrs(interfaces);
-    [KMHGenerics sharedGenerics].privateIPAddress = privateIPAddress;
+    [KMHGenerics reachabilityGenerics].privateIPAddress = privateIPAddress;
 }
 
 @end
