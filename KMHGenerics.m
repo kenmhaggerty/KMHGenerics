@@ -1873,14 +1873,14 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
     [self flipWithRotationAxis:rotationAxis radians:radians withAnimations:animations duration:duration options:options completion:completion];
 }
 
-- (void)updateConstraintsWithDuration:(NSTimeInterval)duration block:(nullable void (^)(void))block {
-    if (block) {
-        block();
-    }
+- (void)updateConstraintsWithDuration:(NSTimeInterval)duration block:(nullable void (^)(void))block completion:(nullable void (^)(BOOL finished))completionBlock {
     [self setNeedsUpdateConstraints];
     [UIView animateWithDuration:duration animations:^{
         [self layoutIfNeeded];
-    }];
+        if (block) {
+            block();
+        }
+    } completion:completionBlock];
 }
 
 - (BOOL)isUsingAutoLayout {
