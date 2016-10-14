@@ -1009,7 +1009,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return [[self class] setWithSet:mutableSet];
 }
 
-- (nonnull instancetype)setByApplyingBlock:(nullable _Nullable id (^)(_Nonnull id))block {
+- (nonnull NSSet *)setByApplyingBlock:(nullable _Nullable id (^)(_Nonnull id))block {
     if (!block) {
         return [NSSet setWithSet:self];
     }
