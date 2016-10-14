@@ -1397,8 +1397,9 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark Public Methods
 
-- (void)refresh:(nullable void (^)(void))block {
+- (void)refreshWithDuration:(NSTimeInterval)animationDuration block:(nullable void (^)(void))block {
     [self beginUpdates];
+    [UIView setAnimationDuration:animationDuration];
     if (block) {
         block();
     }
