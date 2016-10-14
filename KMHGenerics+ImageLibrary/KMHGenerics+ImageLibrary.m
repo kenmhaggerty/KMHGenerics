@@ -106,7 +106,7 @@ NSString * const CameraRollMostRecentImageDidChangeNotification = @"kCameraRollM
 }
 
 + (void)getCameraRollThumbnailWithSize:(CGSize)size completion:(void (^)(UIImage *thumbnail, NSError *error))completionBlock {
-    UIImage *image = [KMHGenerics sharedGenerics].cameraRollMostRecentImage;
+    UIImage *image = [KMHGenerics imageLibraryGenerics].cameraRollMostRecentImage;
     if (image) {
         if (completionBlock) {
             UIImage *thumbnail = [image imageWithSize:size contentMode:UIViewContentModeScaleAspectFill retina:YES];
@@ -116,7 +116,7 @@ NSString * const CameraRollMostRecentImageDidChangeNotification = @"kCameraRollM
     }
     
     void (^setAndRecurseBlock)(UIImage *, NSError *) = ^(UIImage *image, NSError *error) {
-        [KMHGenerics sharedGenerics].cameraRollMostRecentImage = image;
+        [KMHGenerics imageLibraryGenerics].cameraRollMostRecentImage = image;
         [KMHGenerics getCameraRollThumbnailWithSize:size completion:completionBlock];
     };
     
@@ -130,14 +130,16 @@ NSString * const CameraRollMostRecentImageDidChangeNotification = @"kCameraRollM
 
 #pragma mark // PRIVATE METHODS (General) //
 
-+ (instancetype)sharedGenerics {
-    static KMHGenerics *_sharedGenerics = nil;
++ (instancetype)imageLibraryGenerics {
+    static KMHGenerics *_imageLibraryGenerics = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedGenerics = [[KMHGenerics alloc] init];
-        [_sharedGenerics addObserversToAssetsLibrary];
+        _imageLibraryGenerics = [[KMHGenerics alloc] init];
+        if ([KMHGenerics iOSVersion] < 9.0f) {
+            [_imageLibraryGenerics addObserversToAssetsLibrary];
+        }
     });
-    return _sharedGenerics;
+    return _imageLibraryGenerics;
 }
 
 #pragma mark // PRIVATE METHODS (Observers) //
@@ -153,7 +155,7 @@ NSString * const CameraRollMostRecentImageDidChangeNotification = @"kCameraRollM
 #pragma mark // PRIVATE METHODS (Responders) //
 
 - (void)assetsLibraryDidChange:(NSNotification *)notification {
-    [KMHGenerics sharedGenerics].cameraRollMostRecentImage = nil;
+    [KMHGenerics imageLibraryGenerics].cameraRollMostRecentImage = nil;
     [KMHGenerics getCameraRollThumbnailWithSize:CGSizeZero completion:nil];
 }
 
@@ -263,7 +265,7 @@ NSString * const CameraRollMostRecentImageDidChangeNotification = @"kCameraRollM
 }
 
 + (ALAssetsLibrary *)assetsLibrary {
-    return [KMHGenerics sharedGenerics].assetsLibrary;
+    return [KMHGenerics imageLibraryGenerics].assetsLibrary;
 }
 
 + (void)getLastImageFromCameraRollUsingAssetsLibraryWithCompletion:(void (^)(UIImage *image, NSError *error))completionBlock {
