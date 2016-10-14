@@ -1097,6 +1097,22 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @end
 
+#pragma mark - // NSUUID //
+
+@implementation NSUUID (KMHGenerics)
+
+#pragma mark Public Methods
+
++ (nonnull NSUUID *)uuidWithValidator:(nullable BOOL(^)(NSUUID * _Nonnull uuid))validationBlock {
+    NSUUID *uuid;
+    do {
+        uuid = [NSUUID UUID];
+    } while (validationBlock ? !validationBlock(uuid) : NO);
+    return uuid;
+}
+
+@end
+
 #pragma mark - // UIAlertController //
 
 @implementation UIAlertController (KMHGenerics)

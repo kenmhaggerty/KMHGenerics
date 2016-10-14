@@ -160,6 +160,12 @@ NS_REQUIRES_NIL_TERMINATION;
 - (BOOL)onlyContainsCharactersInSet:(nonnull NSCharacterSet *)characterSet;
 @end
 
+#pragma mark - // NSUUID //
+
+@interface NSUUID (KMHGenerics)
++ (nonnull NSUUID *)uuidWithValidator:(nullable BOOL(^)(NSUUID * _Nonnull uuid))validationBlock;
+@end
+
 #pragma mark - // UIAlertController //
 
 @interface UIAlertController (KMHGenerics)
