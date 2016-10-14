@@ -309,6 +309,9 @@ NS_REQUIRES_NIL_TERMINATION;
 - (void)flipVertically:(CGFloat)radians withAnimations:(nullable void (^)(void))animations duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(nullable void (^)(BOOL))completion;
 - (void)updateConstraintsWithDuration:(NSTimeInterval)duration block:(nullable void (^)(void))block completion:(nullable void (^)(BOOL finished))completionBlock;
 - (BOOL)isUsingAutoLayout;
+- (void)removeAllSubviews;
+- (void)addConstraintsToCenterSubview:(nonnull UIView *)subview;
+- (void)addConstraintsToScaleSubview:(nonnull UIView *)subview withMultiplier:(CGFloat)multiplier;
 @end
 
 #pragma mark - // UIViewController //
