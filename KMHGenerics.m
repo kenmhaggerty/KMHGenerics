@@ -1945,7 +1945,7 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
     return self.navigationController.viewControllers[index-1];
 }
 
-- (BOOL)isForceTouchEnabled {
+- (BOOL)forceTouchIsEnabled {
     if (![self.traitCollection respondsToSelector:@selector(forceTouchCapability)]) {
         return NO;
     }

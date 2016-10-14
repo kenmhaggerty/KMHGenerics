@@ -305,7 +305,7 @@ NS_REQUIRES_NIL_TERMINATION;
 @property (nonatomic, strong, nullable) NSDictionary *info;
 @property (nonatomic) BOOL isModal;
 - (nullable UIViewController *)priorViewController;
-- (BOOL)isForceTouchEnabled;
+- (BOOL)forceTouchIsEnabled;
 - (void)performBlockOnChildViewControllers:(nonnull void (^)(UIViewController * _Nonnull childViewController))block;
 - (void)presentError:(nonnull NSError *)error;
 - (void)popOrDismissViewControllerAnimated:(BOOL)animated;
