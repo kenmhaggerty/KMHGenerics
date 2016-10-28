@@ -2139,3 +2139,52 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
 }
 
 @end
+
+#pragma mark - // UIWindow //
+
+#pragma mark Implementation
+
+@implementation UIWindow (KMHGenerics)
+
+#pragma mark // Setters and Getters (Public) //
+
+- (nonnull NSArray <UIViewController *> *)visibleViewControllers {
+    UIViewController *viewController = self.rootViewController;
+    while (viewController.presentedViewController) {
+        viewController = viewController.presentedViewController;
+    }
+    NSMutableArray *visibleViewControllers = [NSMutableArray array];
+    if (!viewController.isVisible) {
+        return visibleViewControllers;
+    }
+    
+    [visibleViewControllers addObject:viewController];
+    NSMutableArray *viewControllersToCheck = [NSMutableArray arrayWithObject:viewController];
+    while (viewControllersToCheck.count) {
+        viewController = viewControllersToCheck.firstObject;
+        if ([viewController isKindOfClass:[UINavigationController class]]) {
+            UINavigationController *navigationController = (UINavigationController *)viewController;
+            UIViewController *visibleViewController = navigationController.visibleViewController;
+            [visibleViewControllers addObject:visibleViewController];
+            [viewControllersToCheck addObject:visibleViewController];
+        }
+        else if ([viewController isKindOfClass:[UITabBarController class]]) {
+            UITabBarController *tabBarController = (UITabBarController *)viewController;
+            UIViewController *selectedViewController = tabBarController.selectedViewController;
+            [visibleViewControllers addObject:selectedViewController];
+            [viewControllersToCheck addObject:selectedViewController];
+        }
+        else {
+            for (UIViewController *childViewController in viewController.childViewControllers) {
+                if (childViewController.view.window) {
+                    [visibleViewControllers addObject:childViewController];
+                    [viewControllersToCheck addObject:childViewController];
+                }
+            }
+        }
+        [viewControllersToCheck removeObject:viewController];
+    }
+    return visibleViewControllers;
+}
+
+@end

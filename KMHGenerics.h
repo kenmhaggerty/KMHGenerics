@@ -389,3 +389,11 @@ NS_REQUIRES_NIL_TERMINATION;
 - (void)presentError:(nonnull NSError *)error;
 - (void)popOrDismissViewControllerAnimated:(BOOL)animated;
 @end
+
+#pragma mark - // UIWindow //
+
+#pragma mark Public Interface
+
+@interface UIWindow (KMHGenerics)
+@property (nonatomic, strong, nonnull, readonly) NSArray <UIViewController *> *visibleViewControllers;
+@end
