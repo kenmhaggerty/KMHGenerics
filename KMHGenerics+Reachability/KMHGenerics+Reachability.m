@@ -24,6 +24,7 @@
 #pragma mark Notifications
 
 NSString * const ReachabilityNotificationObjectKey = @"object";
+NSErrorDomain const ReachabilityErrorDomain = @"ReachabilityErrorDomain";
 
 NSString * const InternetStatusDidChangeNotification = @"kInternetStatusDidChangeNotification";
 NSString * const PublicIPAddressDidChangeNotification = @"kPublicIPAddressDidChangeNotification";
@@ -35,8 +36,8 @@ NSString * const ReachabilityDidReceiveErrorNotification = @"kReachabilityDidRec
 NSUInteger const INTERNET_MAX_ATTEMPTS_COUNT = 2;
 NSTimeInterval const INTERNET_MAX_ATTEMPTS_TIME = 1.0f;
 
-NSString * const PublicIPAddressURL = @"https://api.ipify.org?format=json";
-NSString * const PublicIPAddressKey = @"ip";
+NSString * const PublicIPAddressURL = @"http://checkip.dyndns.org"; // @"https://api.ipify.org?format=json";
+//NSString * const PublicIPAddressKey = @"ip";
 
 #pragma mark Implementation
 
@@ -236,33 +237,38 @@ NSString * const PublicIPAddressKey = @"ip";
     return [KMHGenerics reachabilityGenerics].privateIPAddress;
 }
 
-+ (void)refreshInternetStatus {
++ (void)refreshInternetStatus:(void (^)(NSError *error))completionBlock {
     [KMHGenerics updateInternetStatus];
-    [KMHGenerics fetchPublicIPAddress];
     [KMHGenerics fetchPrivateIPAddress];
+    [KMHGenerics fetchPublicIPAddress:^(NSString *publicIP, NSError *error) {
+        [KMHGenerics reachabilityGenerics].publicIPAddress = publicIP;
+        if (completionBlock) {
+            completionBlock(error);
+        }
+    }];
 }
 
-#pragma mark Delegated Methods (NSURLConnectionDelegate)
-
-#pragma mark Delegated Methods (NSURLConnectionDataDelegate)
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    self.publicIPAddressData = [[NSMutableData alloc] init];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [self.publicIPAddressData appendData:data];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    NSError *error;
-    id jsonObject = [NSJSONSerialization JSONObjectWithData:self.publicIPAddressData options:0 error:&error];
-    if (error) {
-        NSDictionary *userInfo = @{ReachabilityNotificationObjectKey : error};
-        [NSNotificationCenter postNotificationToMainThread:ReachabilityDidReceiveErrorNotification object:nil userInfo:userInfo];
-    }
-    self.publicIPAddress = jsonObject[PublicIPAddressKey];
-}
+//#pragma mark // Delegated Methods (NSURLConnectionDelegate) //
+//
+//#pragma mark // Delegated Methods (NSURLConnectionDataDelegate) //
+//
+//- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+//    self.publicIPAddressData = [[NSMutableData alloc] init];
+//}
+//
+//- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+//    [self.publicIPAddressData appendData:data];
+//}
+//
+//- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+//    NSError *error;
+//    id jsonObject = [NSJSONSerialization JSONObjectWithData:self.publicIPAddressData options:0 error:&error];
+//    if (error) {
+//        NSDictionary *userInfo = @{ReachabilityNotificationObjectKey : error};
+//        [NSNotificationCenter postNotificationToMainThread:ReachabilityDidReceiveErrorNotification object:nil userInfo:userInfo];
+//    }
+//    self.publicIPAddress = jsonObject[PublicIPAddressKey];
+//}
 
 #pragma mark // Private Methods (General) //
 
@@ -295,7 +301,12 @@ NSString * const PublicIPAddressKey = @"ip";
 #pragma mark // Private Methods (Responders) //
 
 - (void)internetStatusDidChange:(NSNotification *)notification {
-    [KMHGenerics refreshInternetStatus];
+    [KMHGenerics refreshInternetStatus:^(NSError *error) {
+        if (error) {
+            NSDictionary *userInfo = @{ReachabilityNotificationObjectKey : error};
+            [NSNotificationCenter postNotificationToMainThread:ReachabilityDidReceiveErrorNotification object:nil userInfo:userInfo];
+        }
+    }];
 }
 
 #pragma mark // Private Methods (Other) //
@@ -316,14 +327,28 @@ NSString * const PublicIPAddressKey = @"ip";
     [KMHGenerics reachabilityGenerics].internetStatus = internetStatus;
 }
 
-+ (void)fetchPublicIPAddress {
+// SOURCE: http://stackoverflow.com/questions/10361023/get-public-ip-in-objective-c
++ (void)fetchPublicIPAddress:(void (^)(NSString *ipAddress, NSError *error))completionBlock {
     if (![KMHGenerics isReachable]) {
+        if (completionBlock) {
+            NSDictionary *userInfo = @{NSLocalizedDescriptionKey : @"Could not fetch public IP address.",
+                                       NSLocalizedFailureReasonErrorKey : @"There is no Internet connection.",
+                                       NSLocalizedRecoverySuggestionErrorKey : @"Please make sure you are connected to the Internet."};
+            NSError *error = [NSError errorWithDomain:ReachabilityErrorDomain code:-1 userInfo:userInfo];
+            completionBlock(nil, error);
+        }
         return;
     }
     
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:PublicIPAddressURL]];
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:[KMHGenerics reachabilityGenerics]];
-    [connection start];
+    NSURL *url = [NSURL URLWithString:PublicIPAddressURL];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSString *html = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSString *publicIP = [[html componentsSeparatedByCharactersInSet:[NSCharacterSet decimalDigitCharacterSet].invertedSet] componentsJoinedByString:@""];
+        if (completionBlock) {
+            completionBlock(publicIP, error);
+        }
+    }] resume];
 }
 
 // SOURCE: http://stackoverflow.com/questions/15693556/how-to-get-the-cellular-ip-address-in-ios-app

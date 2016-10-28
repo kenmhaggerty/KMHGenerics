@@ -17,6 +17,7 @@
 #pragma mark Notifications
 
 extern NSString * const ReachabilityNotificationObjectKey;
+extern NSErrorDomain const ReachabilityErrorDomain;
 
 extern NSString * const InternetStatusDidChangeNotification;
 extern NSString * const PublicIPAddressDidChangeNotification;
@@ -40,7 +41,7 @@ typedef enum {
 
 #pragma mark Public Interface
 
-@interface KMHGenerics (Reachability) <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+@interface KMHGenerics (Reachability) // <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
 // SETUP //
 
@@ -58,6 +59,6 @@ typedef enum {
 + (void)setWWANEnabled:(BOOL)wwanEnabled;
 + (NSString *)publicIPAddress;
 + (NSString *)privateIPAddress;
-+ (void)refreshInternetStatus;
++ (void)refreshInternetStatus:(void (^)(NSError *error))completionBlock;
 
 @end
