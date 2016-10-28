@@ -2100,7 +2100,16 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
 }
 
 - (void)presentError:(nonnull NSError *)error {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@ Error %ld", error.domain, (long)error.code] message:[[NSArray arrayWithNullableObjects:error.localizedDescription, error.localizedRecoverySuggestion, nil] componentsJoinedByString:@" "] preferredStyle:UIAlertControllerStyleAlert actions:nil preferredAction:nil dismissalText:nil completion:nil];
+    NSString *title = error.localizedDescription ?: [NSString stringWithFormat:@"%@ Error %ld", error.domain, (long)error.code];
+    NSMutableArray *messageComponents = [NSMutableArray array];
+    if (error.localizedFailureReason && error.localizedFailureReason.length) {
+        [messageComponents addObject:error.localizedFailureReason];
+    }
+    if (error.localizedRecoverySuggestion && error.localizedRecoverySuggestion.length) {
+        [messageComponents addObject:error.localizedRecoverySuggestion];
+    }
+    NSString *message = [messageComponents componentsJoinedByString:@" "];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert actions:nil preferredAction:nil dismissalText:nil completion:nil];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
