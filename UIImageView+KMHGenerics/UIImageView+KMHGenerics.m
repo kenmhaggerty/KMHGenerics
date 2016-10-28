@@ -11,7 +11,6 @@
 #pragma mark - // IMPORTS (Private) //
 
 #import "UIImageView+KMHGenerics.h"
-#import <UIKit/UIKit.h>
 #import <objc/runtime.h>
 
 #pragma mark - // NSObject (Swizzle) //
