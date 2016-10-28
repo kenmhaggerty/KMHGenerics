@@ -381,6 +381,7 @@ NS_REQUIRES_NIL_TERMINATION;
 @interface UIViewController (KMHGenerics)
 @property (nonatomic, strong, nullable) NSMutableDictionary *userInfo;
 @property (nonatomic) BOOL isModal;
+@property (nonatomic, readonly) BOOL isVisible;
 @property (nonatomic, strong, nullable, readonly) UIViewController *priorViewController;
 @property (nonatomic, readonly) BOOL forceTouchIsEnabled;
 - (void)performBlockOnChildViewControllers:(nonnull void (^)(UIViewController * _Nonnull childViewController))block;

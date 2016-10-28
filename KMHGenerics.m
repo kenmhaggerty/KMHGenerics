@@ -2060,6 +2060,9 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
     return self.isModal;
 }
 
+- (BOOL)isVisible {
+    return (self.view.window != nil);
+}
 
 - (nullable UIViewController *)priorViewController {
     if (!self.navigationController || ![self.navigationController.viewControllers containsObject:self]) {
