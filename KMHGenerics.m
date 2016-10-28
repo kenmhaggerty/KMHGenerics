@@ -1009,6 +1009,12 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 #pragma mark // Public Methods //
 
+- (nonnull instancetype)orderedSetByAddingObject:(nonnull id)anObject {
+    NSMutableOrderedSet *mutableOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self];
+    [mutableOrderedSet addObject:anObject];
+    return [[self class] orderedSetWithOrderedSet:mutableOrderedSet];
+}
+
 - (nonnull instancetype)orderedSetByRemovingObject:(nonnull id)anObject {
     NSMutableOrderedSet *mutableOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self];
     [mutableOrderedSet removeObject:anObject];

@@ -154,6 +154,7 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark Public Interface
 
 @interface NSOrderedSet (KMHGenerics)
+- (nonnull instancetype)orderedSetByAddingObject:(nonnull id)anObject;
 - (nonnull instancetype)orderedSetByRemovingObject:(nonnull id)anObject;
 - (nonnull instancetype)orderedSetBySubtractingSet:(nonnull NSSet *)set;
 @end
