@@ -2031,12 +2031,19 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
 
 #pragma mark // Setters and Getters (Public) //
 
-- (void)setInfo:(nullable NSDictionary *)info {
-    objc_setAssociatedObject(self, @selector(info), info, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setUserInfo:(nullable NSMutableDictionary *)userInfo {
+    objc_setAssociatedObject(self, @selector(userInfo), userInfo, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (nullable NSDictionary *)info {
-    return objc_getAssociatedObject(self, @selector(info));
+- (nullable NSMutableDictionary *)userInfo {
+    NSMutableDictionary *userInfo = objc_getAssociatedObject(self, @selector(userInfo));
+    if (userInfo) {
+        return userInfo;
+    }
+    
+    userInfo = [NSMutableDictionary dictionary];
+    objc_setAssociatedObject(self, @selector(userInfo), userInfo, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    return self.userInfo;
 }
 
 - (void)setIsModal:(BOOL)isModal {

@@ -379,7 +379,7 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark Public Interface
 
 @interface UIViewController (KMHGenerics)
-@property (nonatomic, strong, nullable) NSDictionary *info;
+@property (nonatomic, strong, nullable) NSMutableDictionary *userInfo;
 @property (nonatomic) BOOL isModal;
 @property (nonatomic, strong, nullable, readonly) UIViewController *priorViewController;
 @property (nonatomic, readonly) BOOL forceTouchIsEnabled;
