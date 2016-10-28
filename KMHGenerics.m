@@ -372,6 +372,16 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @implementation NSArray (KMHGenerics)
 
+#pragma mark // Setters and Getters (Public) //
+
+- (nullable id)penultimateObject {
+    if (self.count < 2) {
+        return nil;
+    }
+    
+    return self[self.count-2];
+}
+
 #pragma mark // Public Methods //
 
 + (nonnull instancetype)arrayWithNullableObject:(id)anObject {
@@ -589,14 +599,6 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return indexSet;
 }
 
-- (nullable id)penultimateObject {
-    if (self.count < 2) {
-        return nil;
-    }
-    
-    return self[self.count-2];
-}
-
 #pragma mark // Private Methods //
 
 + (NSNumber *)sortValueForObject:(id _Nonnull)obj {
@@ -743,15 +745,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @implementation NSDictionary (KMHGenerics)
 
-#pragma mark // Public Methods //
-
-+ (nonnull instancetype)dictionaryWithNullableObject:(nullable id)object forKey:(nonnull id <NSCopying>)key {
-    if (!object) {
-        return [[self class] dictionary];
-    }
-    
-    return [[self class] dictionaryWithObject:object forKey:key];
-}
+#pragma mark // Setters and Getters (Public) //
 
 - (nonnull NSSet *)pathURLs {
     NSMutableSet *pathURLs = [NSMutableSet set];
@@ -791,6 +785,16 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return [NSSet setWithSet:pathURLs];
 }
 
+#pragma mark // Public Methods //
+
++ (nonnull instancetype)dictionaryWithNullableObject:(nullable id)object forKey:(nonnull id <NSCopying>)key {
+    if (!object) {
+        return [[self class] dictionary];
+    }
+    
+    return [[self class] dictionaryWithObject:object forKey:key];
+}
+
 - (nonnull NSData *)convertToData {
     return [NSKeyedArchiver archivedDataWithRootObject:self];
 }
@@ -803,6 +807,16 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @implementation NSIndexSet (KMHGenerics)
 
+#pragma mark // Setters and Getters (Public) //
+
+- (nonnull NSArray *)array {
+    NSMutableArray *array = [NSMutableArray array];
+    [self enumerateIndexesUsingBlock:^(NSUInteger index, BOOL * _Nonnull stop) {
+        [array addObject:@(index)];
+    }];
+    return [array sortedArray:YES];
+}
+
 #pragma mark // Public Methods //
 
 + (nonnull instancetype)indexSetWithArray:(nonnull NSArray <NSNumber *> *)array {
@@ -811,14 +825,6 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
         [indexSet addIndex:indexValue.integerValue];
     }
     return indexSet;
-}
-
-- (nonnull NSArray *)array {
-    NSMutableArray *array = [NSMutableArray array];
-    [self enumerateIndexesUsingBlock:^(NSUInteger index, BOOL * _Nonnull stop) {
-        [array addObject:@(index)];
-    }];
-    return [array sortedArray:YES];
 }
 
 @end
@@ -1079,15 +1085,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @implementation NSString (KMHGenerics)
 
-#pragma mark // Public Methods //
-
-+ (nonnull instancetype)randomStringWithCharacters:(nonnull NSString *)charactersString length:(NSUInteger)length {
-    NSMutableString *randomString = [[NSMutableString alloc] initWithCapacity:length];
-    for (int i = 0; i < length; i++) {
-        [randomString appendFormat: @"%C", [charactersString characterAtIndex:(arc4random() % charactersString.length)]];
-    }
-    return [[self class] stringWithString:randomString];
-}
+#pragma mark // Setters and Getters (Public) //
 
 - (BOOL)isEmail {
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$" options:NSRegularExpressionCaseInsensitive error:nil];
@@ -1097,6 +1095,16 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 - (BOOL)isNumeric {
     return [[NSCharacterSet decimalDigitCharacterSet] isSupersetOfSet:[NSCharacterSet characterSetWithCharactersInString:self]];
+}
+
+#pragma mark // Public Methods //
+
++ (nonnull instancetype)randomStringWithCharacters:(nonnull NSString *)charactersString length:(NSUInteger)length {
+    NSMutableString *randomString = [[NSMutableString alloc] initWithCapacity:length];
+    for (int i = 0; i < length; i++) {
+        [randomString appendFormat: @"%C", [charactersString characterAtIndex:(arc4random() % charactersString.length)]];
+    }
+    return [[self class] stringWithString:randomString];
 }
 
 - (nonnull instancetype)encryptedStringUsingKey:(nonnull NSString *)key {
@@ -1189,7 +1197,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @implementation UIButton (KMHGenerics)
 
-#pragma mark // Public Methods //
+#pragma mark // Setters and Getters (Public) //
 
 - (void)setText:(nullable NSString *)text {
     [self setTitle:text forState:UIControlStateNormal];
@@ -1251,7 +1259,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @implementation UIDevice (KMHGenerics)
 
-#pragma mark // Public Methods //
+#pragma mark // Setters and Getters (Public) //
 
 - (BOOL)isPortrait {
     return UIDeviceOrientationIsPortrait(self.orientation);
@@ -1382,7 +1390,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @implementation UINavigationController (KMHGenerics)
 
-#pragma mark // Public Methods //
+#pragma mark // Setters and Getters (Public) //
 
 - (nullable UIViewController *)rootViewController {
     return self.viewControllers.firstObject;
@@ -1396,7 +1404,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @implementation UIScreen (KMHGenerics)
 
-#pragma mark // Public Methods //
+#pragma mark // Setters and Getters (Public) //
 
 - (BOOL)isRetina {
     return (self.scale > 1.0f);
@@ -1429,7 +1437,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @implementation UISegmentedControl (KMHGenerics)
 
-#pragma mark // Public Methods //
+#pragma mark // Setters and Getters (Public) //
 
 - (nullable NSString *)selectedSegmentTitle {
     return [self titleForSegmentAtIndex:self.selectedSegmentIndex];
@@ -1457,7 +1465,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 
 @implementation UIStoryboardSegue (KMHGenerics)
 
-#pragma mark // Public Methods //
+#pragma mark // Setters and Getters (Public) //
 
 - (nullable UIViewController *)contentDestinationViewController {
     if ([self.destinationViewController isKindOfClass:[UINavigationController class]]) {
@@ -1726,17 +1734,17 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 #pragma mark // Setters and Getters (Public) //
 
 - (void)setSelectable:(BOOL)selectable {
-    objc_setAssociatedObject(self, @selector(selectable), @(selectable), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(isSelectable), @(selectable), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (BOOL)selectable {
-    NSNumber *selectableValue = objc_getAssociatedObject(self, @selector(selectable));
-    if (selectableValue) {
-        return selectableValue.boolValue;
+- (BOOL)isSelectable {
+    NSNumber *isSelectableValue = objc_getAssociatedObject(self, @selector(isSelectable));
+    if (isSelectableValue) {
+        return isSelectableValue.boolValue;
     }
     
     self.selectable = YES;
-    return self.selectable;
+    return self.isSelectable;
 }
 
 #pragma mark // Public Methods //
@@ -1750,7 +1758,7 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
 #pragma mark // Overwritten Methods //
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    if (!self.selectable) {
+    if (!self.isSelectable) {
         return NO;
     }
     
@@ -1850,19 +1858,6 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
     return self.layer.cornerRadius;
 }
 
-#pragma mark // Public Methods //
-
-+ (nullable instancetype)loadViewFromNibNamed:(nonnull NSString *)name withOwner:(nullable id)owner options:(nullable NSDictionary *)options {
-    NSArray <UIView *> *views = [[NSBundle mainBundle] loadNibNamed:name owner:owner options:options];
-    for (UIView *view in views) {
-        if ([view isMemberOfClass:[self class]]) {
-            return view;
-        }
-    }
-    
-    return nil;
-}
-
 - (nullable UIView *)firstResponder {
     NSMutableArray *subviews = [NSMutableArray arrayWithArray:self.subviews];
     UIView *subview;
@@ -1874,6 +1869,23 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
         
         [subviews addObjectsFromArray:subview.subviews];
         [subviews removeObject:subview];
+    }
+    
+    return nil;
+}
+
+- (BOOL)isUsingAutoLayout {
+    return (self.constraints.count > 0);
+}
+
+#pragma mark // Public Methods //
+
++ (nullable instancetype)loadViewFromNibNamed:(nonnull NSString *)name withOwner:(nullable id)owner options:(nullable NSDictionary *)options {
+    NSArray <UIView *> *views = [[NSBundle mainBundle] loadNibNamed:name owner:owner options:options];
+    for (UIView *view in views) {
+        if ([view isMemberOfClass:[self class]]) {
+            return view;
+        }
     }
     
     return nil;
@@ -1979,10 +1991,6 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
     } completion:completionBlock];
 }
 
-- (BOOL)isUsingAutoLayout {
-    return (self.constraints.count > 0);
-}
-
 - (void)removeAllSubviews {
     for (UIView *subview in self.subviews) {
         [subview removeFromSuperview];
@@ -2045,7 +2053,6 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
     return self.isModal;
 }
 
-#pragma mark // Public Methods //
 
 - (nullable UIViewController *)priorViewController {
     if (!self.navigationController || ![self.navigationController.viewControllers containsObject:self]) {
@@ -2067,6 +2074,8 @@ CGFloat const UITextViewAnimationSpeed = 0.18f;
     
     return (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable);
 }
+
+#pragma mark // Public Methods //
 
 - (void)performBlockOnChildViewControllers:(void (^)(UIViewController *childViewController))block {
     NSMutableArray <UIViewController *> *childViewControllers = [NSMutableArray arrayWithArray:self.childViewControllers];

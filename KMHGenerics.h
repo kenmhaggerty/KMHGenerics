@@ -49,6 +49,7 @@
 #pragma mark Public Interface
 
 @interface NSArray (KMHGenerics)
+@property (nonatomic, strong, nullable, readonly) id penultimateObject;
 + (nonnull instancetype)arrayWithNullableObject:(nullable id)anObject;
 + (nonnull instancetype)arrayWithNullableObjects:(nullable id)firstObj, ...
 NS_REQUIRES_NIL_TERMINATION;
@@ -70,7 +71,6 @@ NS_REQUIRES_NIL_TERMINATION;
 - (void)compareToArray:(nonnull NSArray *)newArray andGenerateIndexPathsToDelete:(NSArray * _Nonnull * _Nonnull)indexPaths withSection:(NSUInteger)section;
 - (NSUInteger)countObject:(nonnull id)object;
 - (nonnull NSIndexSet *)indexesOfObject:(nonnull id)anObject;
-- (nullable id)penultimateObject;
 @end
 
 #pragma mark - // NSData //
@@ -96,8 +96,8 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark Public Interface
 
 @interface NSDictionary (KMHGenerics)
+@property (nonatomic, strong, nonnull, readonly) NSSet *pathURLs;
 + (nonnull instancetype)dictionaryWithNullableObject:(nullable id)object forKey:(nonnull id <NSCopying>)key;
-- (nonnull NSSet *)pathURLs;
 - (nonnull NSData *)convertToData;
 @end
 
@@ -106,8 +106,8 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark Public Interface
 
 @interface NSIndexSet (KMHGenerics)
+@property (nonatomic, strong, nonnull, readonly) NSArray *array;
 + (nonnull instancetype)indexSetWithArray:(nonnull NSArray <NSNumber *> *)array;
-- (nonnull NSArray *)array;
 @end
 
 #pragma mark - // NSMutableArray //
@@ -175,9 +175,9 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark Public Interface
 
 @interface NSString (KMHGenerics)
+@property (nonatomic, readonly) BOOL isEmail;
+@property (nonatomic, readonly) BOOL isNumeric;
 + (nonnull instancetype)randomStringWithCharacters:(nonnull NSString *)charactersString length:(NSUInteger)length;
-- (BOOL)isEmail;
-- (BOOL)isNumeric;
 - (nonnull instancetype)encryptedStringUsingKey:(nonnull NSString *)key;
 - (nonnull instancetype)decryptedStringUsingKey:(nonnull NSString *)key;
 - (NSUInteger)length;
@@ -214,10 +214,8 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark Public Interface
 
 @interface UIButton (KMHGenerics)
-- (void)setText:(nullable NSString *)text;
-- (nullable NSString *)text;
-- (void)setImage:(nullable UIImage *)image;
-- (nullable UIImage *)image;
+@property (nonatomic, strong, nullable) NSString *text;
+@property (nonatomic, strong, nullable) UIImage *image;
 @end
 
 #pragma mark - // UIColor //
@@ -233,8 +231,8 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark Public Interface
 
 @interface UIDevice (KMHGenerics)
-- (BOOL)isPortrait;
-- (BOOL)isLandscape;
+@property (nonatomic, readonly) BOOL isPortrait;
+@property (nonatomic, readonly) BOOL isLandscape;
 @end
 
 #pragma mark - // UIImage //
@@ -262,7 +260,7 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark Public Interface
 
 @interface UINavigationController (KMHGenerics)
-- (nullable UIViewController *)rootViewController;
+@property (nonatomic, strong, nullable, readonly) UIViewController *rootViewController;
 @end
 
 #pragma mark - // UIScreen //
@@ -270,7 +268,7 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark Public Interface
 
 @interface UIScreen (KMHGenerics)
-- (BOOL)isRetina;
+@property (nonatomic, readonly) BOOL isRetina;
 @end
 
 #pragma mark - // UIScrollView //
@@ -286,7 +284,7 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark Public Interface
 
 @interface UISegmentedControl (KMHGenerics)
-- (nullable NSString *)selectedSegmentTitle;
+@property (nonatomic, strong, nullable, readonly) NSString *selectedSegmentTitle;
 @end
 
 #pragma mark - // UIStoryboard //
@@ -302,7 +300,7 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark Public Interface
 
 @interface UIStoryboardSegue (KMHGenerics)
-- (nullable UIViewController *)contentDestinationViewController;
+@property (nonatomic, strong, nullable, readonly) UIViewController *contentDestinationViewController;
 @end
 
 #pragma mark - // UITableView //
@@ -340,7 +338,7 @@ NS_REQUIRES_NIL_TERMINATION;
 #pragma mark Public Interface
 
 @interface UITextField (KMHGenerics)
-@property (nonatomic) BOOL selectable;
+@property (nonatomic, getter=isSelectable) BOOL selectable;
 - (void)selectTextInRange:(NSRange)range;
 @end
 
@@ -359,8 +357,9 @@ NS_REQUIRES_NIL_TERMINATION;
 
 @interface UIView (KMHGenerics)
 @property (nonatomic) CGFloat cornerRadius;
+@property (nonatomic, strong, nullable, readonly) UIView *firstResponder;
+@property (nonatomic, readonly) BOOL isUsingAutoLayout;
 + (nullable instancetype)loadViewFromNibNamed:(nonnull NSString *)name withOwner:(nullable id)owner options:(nullable NSDictionary *)options;
-- (nullable UIView *)firstResponder;
 - (BOOL)isEventualSubviewOfView:(nonnull UIView *)view;
 - (void)setFrameWithOriginX:(nullable NSNumber *)originX originY:(nullable NSNumber *)originY width:(nullable NSNumber *)width height:(nullable NSNumber *)height;
 - (void)setFrameWithCenterX:(nullable NSNumber *)centerX centerY:(nullable NSNumber *)centerY width:(nullable NSNumber *)width height:(nullable NSNumber *)height;
@@ -370,7 +369,6 @@ NS_REQUIRES_NIL_TERMINATION;
 - (void)flipHorizontally:(CGFloat)radians withAnimations:(nullable void (^)(void))animations duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(nullable void (^)(BOOL))completion;
 - (void)flipVertically:(CGFloat)radians withAnimations:(nullable void (^)(void))animations duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(nullable void (^)(BOOL))completion;
 - (void)updateConstraintsWithDuration:(NSTimeInterval)duration block:(nullable void (^)(void))block completion:(nullable void (^)(BOOL finished))completionBlock;
-- (BOOL)isUsingAutoLayout;
 - (void)removeAllSubviews;
 - (void)addConstraintsToCenterSubview:(nonnull UIView *)subview;
 - (void)addConstraintsToScaleSubview:(nonnull UIView *)subview withMultiplier:(CGFloat)multiplier;
@@ -383,8 +381,8 @@ NS_REQUIRES_NIL_TERMINATION;
 @interface UIViewController (KMHGenerics)
 @property (nonatomic, strong, nullable) NSDictionary *info;
 @property (nonatomic) BOOL isModal;
-- (nullable UIViewController *)priorViewController;
-- (BOOL)forceTouchIsEnabled;
+@property (nonatomic, strong, nullable, readonly) UIViewController *priorViewController;
+@property (nonatomic, readonly) BOOL forceTouchIsEnabled;
 - (void)performBlockOnChildViewControllers:(nonnull void (^)(UIViewController * _Nonnull childViewController))block;
 - (void)presentError:(nonnull NSError *)error;
 - (void)popOrDismissViewControllerAnimated:(BOOL)animated;
