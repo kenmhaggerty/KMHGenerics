@@ -24,6 +24,8 @@
 
 #pragma mark Notifications
 
+NSString * const CameraRollNotificationObjectKey = @"object";
+
 NSString * const CameraRollMostRecentImageDidChangeNotification = @"kCameraRollMostRecentImageDidChangeNotification";
 
 #pragma mark Implementation
@@ -53,7 +55,7 @@ NSString * const CameraRollMostRecentImageDidChangeNotification = @"kCameraRollM
     
     objc_setAssociatedObject(self, @selector(cameraRollMostRecentImage), cameraRollMostRecentImage, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
-    NSDictionary *userInfo = cameraRollMostRecentImage ? @{NOTIFICATION_OBJECT_KEY : cameraRollMostRecentImage} : @{};
+    NSDictionary *userInfo = cameraRollMostRecentImage ? @{CameraRollNotificationObjectKey : cameraRollMostRecentImage} : @{};
     [NSNotificationCenter postNotificationToMainThread:CameraRollMostRecentImageDidChangeNotification object:nil userInfo:userInfo];
 }
 

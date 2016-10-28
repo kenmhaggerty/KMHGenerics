@@ -18,10 +18,6 @@
 
 #pragma mark - // KMHGenerics //
 
-#pragma mark Notifications
-
-extern NSString * _Nonnull const NOTIFICATION_OBJECT_KEY;
-
 #pragma mark Public Interface
 
 @interface KMHGenerics : NSObject

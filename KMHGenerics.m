@@ -15,10 +15,6 @@
 
 #pragma mark - // KMHGenerics //
 
-#pragma mark Notifications
-
-NSString * _Nonnull const NOTIFICATION_OBJECT_KEY = @"kNotificationUserInfo_Object";
-
 #pragma mark Private Interface
 
 @interface KMHGenerics ()

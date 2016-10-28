@@ -17,6 +17,8 @@
 
 #pragma mark Notifications
 
+extern NSString * const CameraRollNotificationObjectKey;
+
 extern NSString * const CameraRollMostRecentImageDidChangeNotification;
 
 #pragma mark Public Interface
