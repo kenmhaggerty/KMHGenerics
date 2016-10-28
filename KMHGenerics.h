@@ -178,10 +178,10 @@ NS_REQUIRES_NIL_TERMINATION;
 @interface NSString (KMHGenerics)
 @property (nonatomic, readonly) BOOL isEmail;
 @property (nonatomic, readonly) BOOL isNumeric;
+//@property (nonatomic, readonly) NSUInteger length;
 + (nonnull instancetype)randomStringWithCharacters:(nonnull NSString *)charactersString length:(NSUInteger)length;
 - (nonnull instancetype)encryptedStringUsingKey:(nonnull NSString *)key;
 - (nonnull instancetype)decryptedStringUsingKey:(nonnull NSString *)key;
-- (NSUInteger)length;
 - (BOOL)onlyContainsCharactersInSet:(nonnull NSCharacterSet *)characterSet;
 @end
 

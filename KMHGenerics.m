@@ -1125,14 +1125,16 @@ CGImageRef CGImageRotated(CGImageRef originalCGImage, double radians) {
     return [[[self class] alloc] initWithData:data encoding:NSUTF8StringEncoding];
 }
 
+- (BOOL)onlyContainsCharactersInSet:(nonnull NSCharacterSet *)characterSet {
+    return [KMHGenerics object:self isEqualToObject:[[self componentsSeparatedByCharactersInSet:characterSet.invertedSet] componentsJoinedByString:@""]];
+}
+
+#pragma mark // Overwritten Methods //
+
 - (NSUInteger)length {
     NSMutableCharacterSet *characterSet = [NSMutableCharacterSet nonBaseCharacterSet];
     [characterSet formUnionWithCharacterSet:[NSCharacterSet controlCharacterSet]];
     return [[self componentsSeparatedByCharactersInSet:characterSet] componentsJoinedByString:@""].length;
-}
-
-- (BOOL)onlyContainsCharactersInSet:(nonnull NSCharacterSet *)characterSet {
-    return [KMHGenerics object:self isEqualToObject:[[self componentsSeparatedByCharactersInSet:characterSet.invertedSet] componentsJoinedByString:@""]];
 }
 
 @end
